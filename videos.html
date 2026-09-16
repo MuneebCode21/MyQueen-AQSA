@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Us, on video</title>
+<meta name="description" content="A small website made for one person.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="videos">
+
+<div id="chrome-root"></div>
+
+<noscript>
+  <style>.reveal{ opacity: 1 !important; transform: none !important; }</style>
+  <p class="noscript-note">This little site works best with JavaScript enabled — the video feed on this page needs it to appear.</p>
+</noscript>
+
+<main>
+
+  <section class="page-intro page-intro--videos">
+    <h1 class="page-intro__heading reveal">Us, in motion.</h1>
+  </section>
+
+  <div class="filter-bar" data-filter-bar role="group" aria-label="Filter videos by category"></div>
+
+  <section class="video-feed" data-video-feed tabindex="0" aria-label="Video feed. Use the arrow keys or scroll to move between clips.">
+    <!-- video slides are rendered here by script.js from CONFIG.videos -->
+  </section>
+
+  <div class="video-feed__nav video-feed__nav--prev">
+    <button type="button" data-video-nav="prev" aria-label="Previous video">‹</button>
+  </div>
+  <div class="video-feed__nav video-feed__nav--next">
+    <button type="button" data-video-nav="next" aria-label="Next video">›</button>
+  </div>
+
+  <button class="video-sound" type="button" data-video-sound aria-pressed="false" aria-label="Play video sound">
+    <span class="video-sound__icon" aria-hidden="true"></span>
+  </button>
+
+  <a class="page-continue" href="story.html" data-magnetic>
+    <span class="page-continue__eyebrow">continue</span>
+    <span class="page-continue__title">Our Story</span>
+    <span class="page-continue__arrow" aria-hidden="true"></span>
+  </a>
+
+</main>
+
+<script src="js/script.js" defer></script>
+</body>
+</html>

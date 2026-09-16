@@ -1,0 +1,33 @@
+Put your photos in this folder.
+
+The site is already looking for these exact filenames (you can rename them,
+just make sure the "src" in js/script.js matches whatever you use):
+
+  hero.jpg        -> the big photo at the very top of index.html
+  final.jpg       -> the photo shown at the very end, on final.html
+  photo-01.jpg    -> memories.html scrapbook
+  photo-02.jpg       "
+  photo-03.jpg       "
+  photo-04.jpg       "
+  photo-05.jpg       "
+  photo-06.jpg       "
+  photo-07.jpg       "
+  photo-08.jpg       "
+  photo-09.jpg       "
+  photo-10.jpg       "
+  story-01.jpg    -> story.html timeline
+  story-02.jpg       "
+  story-03.jpg       "
+  story-04.jpg       "
+  story-05.jpg       "
+
+Until a file exists, the site shows a soft placeholder frame with the
+expected filename printed on it — nothing breaks, nothing looks like an
+error. Just drop the real photo in with the matching name and refresh.
+
+You can also add more/fewer photos than the defaults above — see the
+"memories" and "timeline" lists near the top of js/script.js, and the
+README.md in the project root for the full guide.
+
+Delete this file once you don't need it any more — it has no effect on
+the website itself.
