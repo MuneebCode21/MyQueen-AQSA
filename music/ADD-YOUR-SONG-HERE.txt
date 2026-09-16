@@ -1,0 +1,25 @@
+Put one music file in this folder if you want background music.
+
+The site is already looking for:
+
+  song.mp3
+
+You can rename it, just update the "music" value near the top of
+js/script.js to match.
+
+Notes:
+
+  - Set musicEnabled: false in js/script.js if you don't want a music
+    button at all — it will simply not appear.
+  - If musicEnabled is true but this file is missing, the music button
+    also hides itself automatically. Nothing breaks either way.
+  - Browsers block audio from playing automatically, so she will always
+    need to tap the little music icon once herself to start it — that's
+    normal, not a bug.
+  - Because this is a plain multi-page website (not a single app), the
+    music restarts if she moves from one page to the next. That's an
+    inherent limitation of a no-build, static site like this one — see
+    the README.md in the project root for more on why.
+
+Delete this file once you don't need it any more — it has no effect on
+the website itself.

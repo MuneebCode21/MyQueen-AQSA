@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy Birthday</title>
+<meta name="description" content="A small website made for one person.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="final">
+
+<div id="chrome-root"></div>
+
+<noscript>
+  <style>
+    .reveal{ opacity: 1 !important; transform: none !important; }
+    .gate{ display: none !important; }
+    .final-reveal{ display: flex !important; }
+    .final-reveal__inner{ opacity: 1 !important; transform: none !important; }
+  </style>
+  <p class="noscript-note">This little site works best with JavaScript enabled — some interactive parts may not appear without it.</p>
+</noscript>
+
+<main>
+
+  <div class="gate gate--final" data-final-gate>
+    <div class="gate__inner">
+      <p class="gate__line is-active" data-gate-line>Okay.</p>
+      <p class="gate__line" data-gate-line>You've seen everything.</p>
+      <p class="gate__line" data-gate-line>Almost.</p>
+      <button class="gate__enter" type="button" data-gate-enter data-magnetic disabled>
+        <span>One last thing</span>
+        <span class="gate__enter-arrow" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  <section class="final-reveal" data-final-reveal hidden>
+    <div class="final-reveal__stars" data-stars aria-hidden="true"></div>
+    <div class="final-reveal__confetti" data-confetti aria-hidden="true"></div>
+
+    <div class="final-reveal__inner">
+      <div class="media-frame final-reveal__media" data-media-frame>
+        <img class="media-frame__media" src="images/final.jpg" alt="A favourite photo of her" loading="lazy" decoding="async">
+        <div class="media-frame__empty" aria-hidden="true">
+          <svg class="media-frame__empty-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="10" width="36" height="28" rx="3"></rect><circle cx="16" cy="19" r="3"></circle><path d="M42 30l-9.5-9.5a2 2 0 0 0-2.8 0L14 36"></path></svg>
+          <span class="media-frame__empty-label">images/final.jpg</span>
+        </div>
+      </div>
+
+      <h1 class="final-reveal__title">Happy birthday, <span data-cfg="girlfriendName">Her Name</span> <span aria-hidden="true">❤️</span></h1>
+
+      <div class="final-reveal__message" data-final-message></div>
+
+      <a class="final-reveal__replay" href="index.html">
+        <span class="page-continue__arrow page-continue__arrow--back" aria-hidden="true"></span>
+        <span>Back to the beginning</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/script.js" defer></script>
+</body>
+</html>

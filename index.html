@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Queen - AQSA</title>
+<meta name="description" content="A small website made for one person.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="home">
+
+<div id="chrome-root"></div>
+
+<noscript>
+  <style>
+    .reveal{ opacity: 1 !important; transform: none !important; }
+    .gate{ display: none !important; }
+  </style>
+  <p class="noscript-note">This little site works best with JavaScript enabled — some interactive parts may not appear without it.</p>
+</noscript>
+
+<div class="gate" data-gate>
+  <div class="gate__inner">
+    <p class="gate__line is-active" data-gate-line>Hey, my princess.</p>
+    <p class="gate__line" data-gate-line>I made something for you.</p>
+    <p class="gate__line" data-gate-line>Take your time babe.</p>
+    <button class="gate__enter" type="button" data-gate-enter data-magnetic disabled>
+      <span>Enter</span>
+      <span class="gate__enter-arrow" aria-hidden="true"></span>
+    </button>
+  </div>
+  <div class="gate__grain" aria-hidden="true"></div>
+</div>
+
+<main>
+
+  <section class="hero" data-hero>
+    <div class="media-frame hero__media" data-media-frame>
+      <img class="media-frame__media" src="images/hero.jpg" alt="A favourite photo of her" decoding="async">
+      <div class="media-frame__empty" aria-hidden="true">
+        <svg class="media-frame__empty-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="10" width="36" height="28" rx="3"></rect><circle cx="16" cy="19" r="3"></circle><path d="M42 30l-9.5-9.5a2 2 0 0 0-2.8 0L14 36"></path></svg>
+        <span class="media-frame__empty-label">images/hero.jpg</span>
+      </div>
+    </div>
+    <div class="hero__scrim" aria-hidden="true"></div>
+    <div class="hero__content">
+      <p class="hero__eyebrow">the person this little website is for</p>
+      <h1 class="hero__name"><span data-cfg="girlfriendName">Aqsa</span></h1>
+    </div>
+    <div class="hero__cue" aria-hidden="true">
+      <span>Scroll slowly.</span>
+      <span class="hero__chevron"></span>
+    </div>
+  </section>
+
+  <section class="chapters">
+    <div class="u-container">
+      <p class="chapters__lede reveal">There's a bit more, whenever you're ready. Pick a place to start, or just keep going in order.</p>
+
+      <ol class="chapters__list">
+        <li class="chapters__item reveal" style="--i:0">
+          <a href="her.html" data-magnetic>
+            <span class="chapters__index">01</span>
+            <span class="chapters__text">
+              <span class="chapters__title">Her</span>
+              <span class="chapters__sub">things I notice</span>
+            </span>
+          </a>
+        </li>
+        <li class="chapters__item reveal" style="--i:1">
+          <a href="memories.html" data-magnetic>
+            <span class="chapters__index">02</span>
+            <span class="chapters__text">
+              <span class="chapters__title">Memories</span>
+              <span class="chapters__sub">a small, unfinished scrapbook</span>
+            </span>
+          </a>
+        </li>
+        <li class="chapters__item reveal" style="--i:2">
+          <a href="videos.html" data-magnetic>
+            <span class="chapters__index">03</span>
+            <span class="chapters__text">
+              <span class="chapters__title">Together</span>
+              <span class="chapters__sub">us, on video</span>
+            </span>
+          </a>
+        </li>
+        <li class="chapters__item reveal" style="--i:3">
+          <a href="story.html" data-magnetic>
+            <span class="chapters__index">04</span>
+            <span class="chapters__text">
+              <span class="chapters__title">Our Story</span>
+              <span class="chapters__sub">how we got here</span>
+            </span>
+          </a>
+        </li>
+        <li class="chapters__item reveal" style="--i:4">
+          <a href="letter.html" data-magnetic>
+            <span class="chapters__index">05</span>
+            <span class="chapters__text">
+              <span class="chapters__title">The Letter</span>
+              <span class="chapters__sub">something I wanted to say properly</span>
+            </span>
+          </a>
+        </li>
+      </ol>
+
+      <a class="chapters__start reveal" href="her.html">
+        <span>or, just start from the beginning</span>
+        <span class="page-continue__arrow" aria-hidden="true"></span>
+      </a>
+
+      <div class="countdown" data-countdown hidden>
+        <p class="countdown__label">counting down to your birthday</p>
+        <div class="countdown__units">
+          <div class="countdown__unit"><span data-cd-d>00</span><small>days</small></div>
+          <div class="countdown__unit"><span data-cd-h>00</span><small>hrs</small></div>
+          <div class="countdown__unit"><span data-cd-m>00</span><small>min</small></div>
+          <div class="countdown__unit"><span data-cd-s>00</span><small>sec</small></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="egg egg--home" type="button" data-egg="egg-home" aria-label="A tiny hidden something">
+      <span aria-hidden="true">✦</span>
+    </button>
+  </section>
+
+</main>
+
+<script src="js/script.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+Put your video clips in this folder.
+
+The site is already looking for these exact filenames (rename them if you
+like, just make sure the "src" in js/script.js matches):
+
+  video-01.mp4  -> videos.html vertical feed
+  video-02.mp4     "
+  video-03.mp4     "
+  video-04.mp4     "
+  video-05.mp4     "
+  video-06.mp4     "
+
+A few tips for best results:
+
+  - Vertical / portrait clips (9:16) work best — that's the shape the
+    feed is designed around.
+  - Compress before uploading. Phone videos can be huge; something like
+    HandBrake (free, handbrake.fr) set to "Fast 1080p30" is a good
+    starting point and will load far faster on GitHub Pages.
+  - Keep individual files under ~15-25MB if you can — GitHub has a
+    100MB hard limit per file, but smaller loads faster and feels
+    smoother for her.
+  - .mp4 (H.264) has the best browser support. Avoid .mov if you can
+    convert it first.
+
+Until a file exists, that slot shows a soft placeholder with the expected
+filename printed on it — nothing breaks. See CONFIG.videos near the top
+of js/script.js to add, remove, caption, or categorise clips, and the
+README.md in the project root for the full guide.
+
+Delete this file once you don't need it any more — it has no effect on
+the website itself.

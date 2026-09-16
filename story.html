@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Our Story</title>
+<meta name="description" content="A small website made for one person.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="story">
+
+<div id="chrome-root"></div>
+
+<noscript>
+  <style>.reveal{ opacity: 1 !important; transform: none !important; }</style>
+  <p class="noscript-note">This little site works best with JavaScript enabled — the timeline on this page needs it to appear.</p>
+</noscript>
+
+<main>
+
+  <section class="page-intro page-intro--story">
+    <h1 class="page-intro__heading reveal">Our story, so far.</h1>
+  </section>
+
+  <div class="story-pin">
+    <div class="story-sticky">
+      <div class="story-track" data-story-track>
+        <!-- timeline stops are rendered here by script.js from CONFIG.timeline -->
+      </div>
+    </div>
+  </div>
+
+  <a class="page-continue" href="letter.html" data-magnetic>
+    <span class="page-continue__eyebrow">continue</span>
+    <span class="page-continue__title">The Letter</span>
+    <span class="page-continue__arrow" aria-hidden="true"></span>
+  </a>
+
+</main>
+
+<script src="js/script.js" defer></script>
+</body>
+</html>
