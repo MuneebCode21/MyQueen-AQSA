@@ -307,17 +307,16 @@ function initChrome(){
   if(!root) return;
 
   const currentPage = document.body.dataset.page || "home";
-  const monogram = ((CONFIG.girlfriendName || "").trim().charAt(0) || "\u2661").toUpperCase();
-
   root.innerHTML =
     '<div class="grain" aria-hidden="true"></div>' +
-    '<a class="chrome-mono" href="index.html" aria-label="Back to the beginning">' + escapeHTML(monogram) + '</a>' +
+    '<a class="chrome-mono" href="index.html" aria-label="Back to the beginning">AQSA</a>' +
     '<div class="chrome-top-right">' +
       '<button class="chrome-music" type="button" data-music-toggle aria-pressed="false" aria-label="Play background music">' +
         '<span class="chrome-music__bars" aria-hidden="true"><i></i><i></i><i></i></span>' +
       '</button>' +
       '<button class="chrome-nav-trigger" type="button" data-nav-trigger aria-haspopup="true" aria-expanded="false" aria-label="Open menu">' +
-        '<span></span><span></span>' +
+        '<span class="chrome-nav-trigger__label">MENU</span>' +
+        '<span aria-hidden="true"></span><span aria-hidden="true"></span>' +
       '</button>' +
     '</div>' +
     '<nav class="chrome-nav" data-nav aria-hidden="true">' +
@@ -369,6 +368,130 @@ function initChrome(){
   updateEggsFoundDisplay();
 }
 
+
+/* ========================================================================
+   4. SCROLL DOT NAVIGATION
+   ======================================================================== */
+function initScrollDots(){
+  if(prefersReducedMotion() && !document.querySelector("main")) return;
+
+  const main = document.querySelector("main");
+  if(!main) return;
+
+  const candidates = Array.prototype.slice.call(
+    main.querySelectorAll("[data-scroll-section], main > section, .chapters, .story-stop, .page-intro, .final-reveal")
+  );
+
+  const sections = [];
+  const seen = new Set();
+  candidates.forEach(function(el){
+    if(seen.has(el) || !el || el.offsetHeight < 80) return;
+    seen.add(el);
+    sections.push(el);
+  });
+
+  // On pages with no semantic sections, use substantial direct children of <main>.
+  if(sections.length < 2){
+    main.querySelectorAll(":scope > *").forEach(function(el){
+      if(seen.has(el) || el.offsetHeight < 180) return;
+      if(el.matches(".grain, .lightbox, .note-overlay")) return;
+      seen.add(el);
+      sections.push(el);
+    });
+  }
+
+  if(sections.length < 2) return;
+
+  const layer = document.createElement("nav");
+  layer.className = "scroll-dots";
+  layer.setAttribute("aria-label", "Page sections");
+
+  const dots = [];
+  const usedLabels = new Set();
+
+  function labelFor(section, index){
+    const custom = section.getAttribute("data-scroll-label") || section.getAttribute("aria-label");
+    if(custom) return custom;
+    const heading = section.querySelector("h1, h2, h3");
+    if(heading && heading.textContent.trim()) return heading.textContent.trim();
+    const pageName = (document.body.dataset.page || "page").replace(/[-_]/g, " ");
+    return pageName + " " + (index + 1);
+  }
+
+  sections.forEach(function(section, index){
+    let label = labelFor(section, index);
+    let base = label || ("Section " + (index + 1));
+    let unique = base;
+    let suffix = 2;
+    while(usedLabels.has(unique)){ unique = base + " " + suffix++; }
+    usedLabels.add(unique);
+
+    const id = section.id || ("scroll-section-" + (index + 1));
+    section.id = id;
+
+    const dot = document.createElement("button");
+    dot.className = "scroll-dot";
+    dot.type = "button";
+    dot.setAttribute("aria-label", "Go to " + unique);
+
+    dot.addEventListener("click", function(){
+      section.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "center" });
+    });
+
+    layer.appendChild(dot);
+    dots.push({ dot: dot, section: section });
+  });
+
+  document.body.appendChild(layer);
+
+  let activeIndex = -1;
+  let ticking = false;
+
+  function setActive(index){
+    if(index === activeIndex) return;
+    activeIndex = index;
+    dots.forEach(function(item, i){
+      const active = i === index;
+      item.dot.classList.toggle("is-active", active);
+      if(active) item.dot.setAttribute("aria-current", "true");
+      else item.dot.removeAttribute("aria-current");
+    });
+  }
+
+  function updateActive(){
+    ticking = false;
+    const targetY = window.innerHeight * 0.42;
+    let closest = 0;
+    let closestDistance = Infinity;
+
+    dots.forEach(function(item, index){
+      const rect = item.section.getBoundingClientRect();
+      const center = rect.top + Math.min(rect.height, window.innerHeight * 0.72) / 2;
+      const distance = Math.abs(center - targetY);
+      const visible = rect.bottom > 0 && rect.top < window.innerHeight;
+      const weighted = visible ? distance * 0.7 : distance + 1000;
+      if(weighted < closestDistance){
+        closestDistance = weighted;
+        closest = index;
+      }
+    });
+
+    if(window.scrollY <= 12) closest = 0;
+    const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 16;
+    if(nearBottom) closest = dots.length - 1;
+    setActive(closest);
+  }
+
+  function requestUpdate(){
+    if(ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(updateActive);
+  }
+
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate, { passive: true });
+  requestUpdate();
+}
 
 /* ========================================================================
    4. EASTER EGGS
@@ -1844,6 +1967,7 @@ document.addEventListener("DOMContentLoaded", function(){
   applyGirlfriendName();
   wireMediaFallbacks();
   initScrollReveal();
+  initScrollDots();
   initEasterEggs();
   initCustomCursor();
   initMagneticButtons();

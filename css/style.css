@@ -536,21 +536,30 @@ main{ position: relative; overflow: clip; }
   top: max(1rem, env(safe-area-inset-top));
   left: max(1rem, env(safe-area-inset-left));
   z-index: var(--z-chrome);
-  width: 42px; height: 42px;
-  border-radius: 50%;
-  background: var(--paper);
+  min-width: 72px; height: 42px;
+  padding: 0 .95rem;
+  border-radius: 999px;
+  background: rgba(255,252,247,.92);
+  border: 1px solid rgba(176,141,87,.28);
   box-shadow: var(--shadow-tight);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 1.05rem;
+  font-size: 1rem;
+  letter-spacing: .02em;
   color: var(--wine);
-  transition: transform .3s var(--ease-soft);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform .3s var(--ease-soft), box-shadow .3s var(--ease-soft), border-color .3s var(--ease-soft);
 }
 
-.chrome-mono:hover{ transform: scale(1.08); }
+.chrome-mono:hover{
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 12px 28px -14px rgba(43,36,30,.34);
+  border-color: rgba(176,141,87,.5);
+}
 
 .chrome-top-right{
   position: fixed;
@@ -562,17 +571,37 @@ main{ position: relative; overflow: clip; }
 }
 
 .chrome-music, .chrome-nav-trigger{
-  width: 42px; height: 42px;
-  border-radius: 50%;
-  background: var(--paper);
+  height: 42px;
+  border-radius: 999px;
+  background: rgba(255,252,247,.92);
+  border: 1px solid rgba(176,141,87,.28);
   box-shadow: var(--shadow-tight);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform .3s var(--ease-soft);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform .3s var(--ease-soft), box-shadow .3s var(--ease-soft), border-color .3s var(--ease-soft);
 }
 
-.chrome-music:hover, .chrome-nav-trigger:hover{ transform: scale(1.08); }
+.chrome-music{ width: 42px; }
+
+.chrome-nav-trigger{
+  width: auto;
+  min-width: 78px;
+  padding: 0 .9rem;
+  gap: .55rem;
+  color: var(--wine);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+}
+
+.chrome-music:hover, .chrome-nav-trigger:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -14px rgba(43,36,30,.34);
+  border-color: rgba(176,141,87,.5);
+}
 
 .chrome-music[hidden]{ display: none; }
 
@@ -612,6 +641,8 @@ main{ position: relative; overflow: clip; }
   border-radius: 2px;
   transition: transform .3s var(--ease), opacity .3s var(--ease);
 }
+
+.chrome-nav-trigger__label{ line-height: 1; }
 
 .chrome-nav-trigger span + span{ margin-top: 4px; }
 
@@ -701,6 +732,105 @@ main{ position: relative; overflow: clip; }
 }
 
 .chrome-nav__eggs[hidden]{ display: none; }
+
+/* ==========================================================================
+   12. SCROLL DOT NAVIGATION
+   ========================================================================== */
+.scroll-dots{
+  position: fixed;
+  top: 50%;
+  right: clamp(1rem, 2.3vw, 2rem);
+  z-index: calc(var(--z-chrome) - 1);
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .85rem;
+  padding: .55rem .35rem;
+  pointer-events: none;
+}
+
+.scroll-dots::before{
+  content: "";
+  position: absolute;
+  top: .8rem;
+  bottom: .8rem;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(176,141,87,.32), transparent);
+  z-index: -1;
+}
+
+.scroll-dot{
+  --dot-size: 7px;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.scroll-dot::before{
+  content: "";
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: 50%;
+  background: var(--rose-deep);
+  border: 1px solid rgba(255,252,247,.88);
+  box-shadow: 0 0 0 1px rgba(176,141,87,.22), 0 3px 10px rgba(43,36,30,.1);
+  transition: width .45s var(--ease), height .45s var(--ease), background .35s var(--ease), box-shadow .45s var(--ease), transform .45s var(--ease);
+}
+
+.scroll-dot::after{
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(.45);
+  transition: opacity .45s var(--ease), transform .55s var(--ease);
+}
+
+.scroll-dot:hover::before{
+  transform: scale(1.25);
+}
+
+.scroll-dot.is-active::before{
+  --dot-size: 10px;
+  background: var(--wine);
+  box-shadow: 0 0 0 4px rgba(217,175,166,.28), 0 0 18px rgba(176,141,87,.25);
+}
+
+.scroll-dot.is-active::after{
+  opacity: .95;
+  transform: scale(1.35);
+}
+
+/* Section names intentionally omitted on the visible rail for a cleaner, minimal look. */
+
+@media (max-width: 900px){
+  .scroll-dots{ right: .55rem; }
+}
+
+@media (max-width: 700px){
+  .scroll-dots{
+    right: .2rem;
+    gap: .7rem;
+    transform: translateY(-50%) scale(.9);
+    transform-origin: right center;
+  }
+  .chrome-mono{ min-width: 66px; height: 40px; padding-inline: .8rem; }
+  .chrome-nav-trigger{ min-width: 72px; height: 40px; padding-inline: .78rem; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .scroll-dot::before, .scroll-dot::after{ transition: none; }
+}
 
 /* ==========================================================================
    12. EASTER EGGS
