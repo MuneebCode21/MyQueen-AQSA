@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>My Queen - AQSA</title>
+<title>My Queen - AQSA MUNEEB</title>
+<link rel="icon" type="image/jpeg" href = "images/IMG-20260316-WA0077.jpg">
 <meta name="description" content="A small website made for one person.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,8 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
-<body data-page="home">
-
+<body data-page="home" class="page-fade-in">
 <div id="chrome-root"></div>
 
 <noscript>
@@ -34,20 +34,21 @@
     </button>
   </div>
   <div class="gate__grain" aria-hidden="true"></div>
+  <div class="gate__bloom" aria-hidden="true"></div>
 </div>
 
 <main>
 
   <section class="hero" data-hero>
-    <div class="media-frame hero__media" data-media-frame>
-      <img class="media-frame__media" src="images/hero.jpg" alt="A favourite photo of her" decoding="async">
+    <div class="media-frame hero__media" data-media-frame data-parallax="0.15">
+      <img class="media-frame__media" src="images/IMG-20260602-WA0003.jpg" alt="A favourite photo of her" decoding="async">
       <div class="media-frame__empty" aria-hidden="true">
         <svg class="media-frame__empty-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="10" width="36" height="28" rx="3"></rect><circle cx="16" cy="19" r="3"></circle><path d="M42 30l-9.5-9.5a2 2 0 0 0-2.8 0L14 36"></path></svg>
-        <span class="media-frame__empty-label">images/hero.jpg</span>
+        <span class="media-frame__empty-label">images/IMG-20260602-WA0003.jpg</span>
       </div>
     </div>
     <div class="hero__scrim" aria-hidden="true"></div>
-    <div class="hero__content">
+    <div class="hero__content" data-parallax="-0.05">
       <p class="hero__eyebrow">the person this little website is for</p>
       <h1 class="hero__name"><span data-cfg="girlfriendName">Aqsa</span></h1>
     </div>
@@ -57,50 +58,43 @@
     </div>
   </section>
 
-  <section class="chapters">
+  <section class="chapters paper-texture">
     <div class="u-container">
-      <p class="chapters__lede reveal">There's a bit more, whenever you're ready. Pick a place to start, or just keep going in order.</p>
+      <div class="heading-wrapper">
+        <p class="chapters__lede reveal">There's a bit more, whenever you're ready. Pick a place to start, or just keep going in order.</p>
+      </div>
 
       <ol class="chapters__list">
         <li class="chapters__item reveal" style="--i:0">
-          <a href="her.html" data-magnetic>
-            <span class="chapters__index">01</span>
-            <span class="chapters__text">
-              <span class="chapters__title">Her</span>
-              <span class="chapters__sub">things I notice</span>
-            </span>
-          </a>
-        </li>
-        <li class="chapters__item reveal" style="--i:1">
           <a href="memories.html" data-magnetic>
-            <span class="chapters__index">02</span>
+            <span class="chapters__index">01</span>
             <span class="chapters__text">
               <span class="chapters__title">Memories</span>
               <span class="chapters__sub">a small, unfinished scrapbook</span>
             </span>
           </a>
         </li>
-        <li class="chapters__item reveal" style="--i:2">
+        <li class="chapters__item reveal" style="--i:1">
           <a href="videos.html" data-magnetic>
-            <span class="chapters__index">03</span>
+            <span class="chapters__index">02</span>
             <span class="chapters__text">
               <span class="chapters__title">Together</span>
               <span class="chapters__sub">us, on video</span>
             </span>
           </a>
         </li>
-        <li class="chapters__item reveal" style="--i:3">
+        <li class="chapters__item reveal" style="--i:2">
           <a href="story.html" data-magnetic>
-            <span class="chapters__index">04</span>
+            <span class="chapters__index">03</span>
             <span class="chapters__text">
               <span class="chapters__title">Our Story</span>
               <span class="chapters__sub">how we got here</span>
             </span>
           </a>
         </li>
-        <li class="chapters__item reveal" style="--i:4">
+        <li class="chapters__item reveal" style="--i:3">
           <a href="letter.html" data-magnetic>
-            <span class="chapters__index">05</span>
+            <span class="chapters__index">04</span>
             <span class="chapters__text">
               <span class="chapters__title">The Letter</span>
               <span class="chapters__sub">something I wanted to say properly</span>
@@ -108,11 +102,6 @@
           </a>
         </li>
       </ol>
-
-      <a class="chapters__start reveal" href="her.html">
-        <span>or, just start from the beginning</span>
-        <span class="page-continue__arrow" aria-hidden="true"></span>
-      </a>
 
       <div class="countdown" data-countdown hidden>
         <p class="countdown__label">counting down to your birthday</p>
@@ -128,6 +117,30 @@
     <button class="egg egg--home" type="button" data-egg="egg-home" aria-label="A tiny hidden something">
       <span aria-hidden="true">✦</span>
     </button>
+  </section>
+
+  <section class="mini-media-strip paper-texture" aria-label="Optional tiny media slots">
+    <div class="mini-media-card js-tilt">
+      <div class="mini-media-card__frame media-frame" data-media-frame>
+        <img class="media-frame__media" src="images/giphy.gif" alt="Optional tiny image or GIF" loading="lazy" decoding="async">
+        <div class="media-frame__empty" aria-hidden="true"><span class="media-frame__empty-label">images/tiny-01.gif</span></div>
+      </div>
+      <div class="mini-media-card__label"><span>tiny favourite</span><span class="mini-media-card__dot" aria-hidden="true"></span></div>
+    </div>
+    <div class="mini-media-card js-tilt">
+      <div class="mini-media-card__frame media-frame" data-media-frame>
+        <img class="media-frame__media" src="images/jYMiLeCw11vI0dprM9.webp" alt="Optional tiny image or GIF" loading="lazy" decoding="async">
+        <div class="media-frame__empty" aria-hidden="true"><span class="media-frame__empty-label">images/tiny-02.gif</span></div>
+      </div>
+      <div class="mini-media-card__label"><span>little moment</span><span class="mini-media-card__dot" aria-hidden="true"></span></div>
+    </div>
+    <div class="mini-media-card js-tilt">
+      <div class="mini-media-card__frame media-frame" data-media-frame>
+        <img class="media-frame__media" src="images/Dog Love GIF.gif" alt="Optional tiny image or GIF" loading="lazy" decoding="async">
+        <div class="media-frame__empty" aria-hidden="true"><span class="media-frame__empty-label">images/tiny-03.gif</span></div>
+      </div>
+      <div class="mini-media-card__label"><span>one more</span><span class="mini-media-card__dot" aria-hidden="true"></span></div>
+    </div>
   </section>
 
 </main>

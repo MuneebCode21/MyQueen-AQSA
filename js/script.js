@@ -30,7 +30,7 @@ const CONFIG = {
   // false until you want it — it stays hidden until then. birthdayDate
   // should be in "YYYY-MM-DD" format.
   countdownEnabled: true,
-  birthdayDate: "2026-09-23",
+  birthdayDate: "2026-09-22",
 
   // Optional background music. Put an mp3 (or similar) in the music/ folder
   // and point to it here. If the file is missing, the music button simply
@@ -40,10 +40,13 @@ const CONFIG = {
   music: "music/Murtaza Qizilbash  Hum  Official Audio - Murtaza Qizilbash.mp3",
 
   // The big image at the very top of the site (index.html).
-  heroImage: "images/hero.jpg",
+  heroImage: "images/IMG_20260317_030241.jpg",
 
-  // The image shown at the very end, after "one last thing" (final.html).
-  // Can be the same file as heroImage, or a different favourite.
+  // The video shown at the very end, after the final-page opening (final.html).
+  // Put the MP4 inside the videos/ folder and keep this path exact.
+  finalVideo: "videos/lv_7577429960902806789_20260915190229.mp4",
+
+  // Optional fallback image for the final page if needed elsewhere.
   finalImage: "images/final.jpg",
 
   // ---- her.html, zone 1 — "things I notice about you" ----
@@ -90,9 +93,9 @@ const CONFIG = {
   // "category" can be anything, but HER / US / MEMORIES / FUNNY / FAVOURITES
   // are the ones the filter bar is tuned for. "featured" adds a small star.
   videos: [
-    { src: "videos/lv_7577429960902806789_20260915190229.mp4", caption: "One of my favourites.", category: "FAVOURITES", featured: false },
+    { src: "videos/lv_7589668455452888336_20260910023831.mp4", caption: "One of my favourites.", category: "FAVOURITES", featured: false },
     { src: "videos/lv_7582950593031900432_20260915180441.mp4", caption: "PLACEHOLDER caption", category: "US", featured: false },
-    { src: "videos/video-03.mp4", caption: "PLACEHOLDER caption", category: "HER", featured: false },
+    { src: "videos/lv_7628944377343249665_20260909223758.mp4", caption: "PLACEHOLDER caption", category: "HER", featured: false },
     { src: "videos/video-04.mp4", caption: "PLACEHOLDER caption", category: "FUNNY", featured: false },
     { src: "videos/video-05.mp4", caption: "PLACEHOLDER caption", category: "MEMORIES", featured: false },
     { src: "videos/video-06.mp4", caption: "PLACEHOLDER caption", category: "US", featured: false }
@@ -122,7 +125,7 @@ const CONFIG = {
 
   // ---- final.html — the very last message, after "one last thing" ----
   finalMessage: [
-    "PLACEHOLDER — your closing message. This is the last thing she reads, so keep it simple and honest."
+    "Your the most beautiful person in the world that I know and I love you so much. I hope you have a wonderful birthday and a great year ahead. You deserve all the happiness in the world."
   ],
 
   // ---- small hidden discoveries (index, memories, story pages) ----
@@ -201,8 +204,9 @@ const VIDEO_PLACEHOLDER_SVG =
   '</svg>';
 
 const CHAPTERS = [
-  { id: "home", href: "index.html", label: "Start" },
-  { id: "her", href: "her.html", label: "Her" },
+  // Home and "Her" are intentionally omitted from the menu:
+  // the home page is already the starting point, and "Her" is no longer
+  // presented as a separate chapter in the main navigation.
   { id: "memories", href: "memories.html", label: "Memories" },
   { id: "videos", href: "videos.html", label: "Together" },
   { id: "story", href: "story.html", label: "Our Story" },
@@ -237,19 +241,13 @@ function wireMediaFallbacks(){
    ======================================================================== */
 
 function setFavicon(){
-  const letter = ((CONFIG.girlfriendName || "").trim().charAt(0) || "\u2661").toUpperCase();
-  const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">' +
-    '<rect width="64" height="64" rx="16" fill="#6B2C3A"/>' +
-    '<text x="32" y="43" font-family="Georgia, \'Times New Roman\', serif" font-size="32" fill="#F8F3EC" text-anchor="middle">' + letter + '</text>' +
-    '</svg>';
-  let link = document.querySelector('link[rel="icon"]');
-  if(!link){
-    link = document.createElement("link");
-    link.rel = "icon";
-    document.head.appendChild(link);
+  /* Keep the favicon defined in the HTML.
+     The HTML <link rel="icon"> remains the source of truth. */
+  const link = document.querySelector('link[rel="icon"]');
+
+  if(link){
+    link.type = "image/jpeg";
   }
-  link.type = "image/svg+xml";
-  link.href = "data:image/svg+xml," + encodeURIComponent(svg);
 }
 
 function applyGirlfriendName(){
@@ -368,6 +366,56 @@ function initChrome(){
   updateEggsFoundDisplay();
 }
 
+
+
+function initFooter(){
+  if(document.querySelector(".site-footer")) return;
+
+  const main = document.querySelector("main");
+  if(!main) return;
+
+  const name = (CONFIG.girlfriendName || "Aqsa").trim() || "Aqsa";
+  const footer = document.createElement("footer");
+  footer.className = "site-footer";
+  footer.setAttribute("aria-label", "End of the site");
+
+  footer.innerHTML =
+    '<div class="site-footer__top">' +
+      '<div class="site-footer__eyebrow">Personal archive · est. 2026</div>' +
+      '<div class="site-footer__grid">' +
+        '<div>' +
+          '<div class="site-footer__spark" aria-hidden="true"></div>' +
+          '<div class="site-footer__title" aria-label="' + escapeHTML(name) + '">' + escapeHTML(name.toUpperCase()) + '</div>' +
+        '</div>' +
+        '<p class="site-footer__dek">A little corner of the internet, made one chapter at a time, just for you.</p>' +
+      '</div>' +
+      '<div class="site-footer__rule" aria-hidden="true"></div>' +
+    '</div>' +
+    '<div class="site-footer__bottom">' +
+      '<div class="site-footer__meta">' +
+        '<span>Made with love</span>' +
+        '<span>For ' + escapeHTML(name) + '</span>' +
+        '<span>Always, a little more</span>' +
+      '</div>' +
+      '<a class="site-footer__top-link" href="#top" aria-label="Back to top">Back to the beginning</a>' +
+    '</div>';
+
+  main.appendChild(footer);
+
+  // Give the page a stable target without altering visible page content.
+  if(!document.getElementById("top")){
+    const anchor = document.createElement("span");
+    anchor.id = "top";
+    anchor.setAttribute("aria-hidden", "true");
+    anchor.style.position = "absolute";
+    anchor.style.top = "0";
+    anchor.style.left = "0";
+    anchor.style.width = "1px";
+    anchor.style.height = "1px";
+    anchor.style.pointerEvents = "none";
+    document.body.prepend(anchor);
+  }
+}
 
 /* ========================================================================
    4. SCROLL DOT NAVIGATION
@@ -731,43 +779,102 @@ function initScrollReveal(){
    8. CUSTOM CURSOR + MAGNETIC BUTTONS (desktop only)
    ======================================================================== */
 
-function initCustomCursor(){
-  if(!canHover()) return;
-
-  document.documentElement.classList.add("has-custom-cursor");
-
-  const dot = document.createElement("div");
-  dot.className = "cursor-dot";
-  const ring = document.createElement("div");
-  ring.className = "cursor-ring";
-  document.body.append(dot, ring);
-
-  let targetX = window.innerWidth / 2;
-  let targetY = window.innerHeight / 2;
-  let ringX = targetX;
-  let ringY = targetY;
-
-  window.addEventListener("mousemove", function(e){
-    targetX = e.clientX;
-    targetY = e.clientY;
-    dot.style.transform = "translate(" + e.clientX + "px," + e.clientY + "px)";
-  }, { passive: true });
-
-  function raf(){
-    ringX += (targetX - ringX) * 0.18;
-    ringY += (targetY - ringY) * 0.18;
-    ring.style.transform = "translate(" + ringX + "px," + ringY + "px)";
-    requestAnimationFrame(raf);
-  }
-  requestAnimationFrame(raf);
-
-  const interactiveSelector = "a, button, .scrapbook__item, .notes-field__item, .video-slide, .reason-card__face, [role='button']";
-  document.addEventListener("mouseover", function(e){
-    if(e.target.closest(interactiveSelector)) ring.classList.add("is-active");
-  });
-  document.addEventListener("mouseout", function(e){
-    if(e.target.closest(interactiveSelector)) ring.classList.remove("is-active");
-  });
+function initCustomCursor(){ 
+  if(!canHover()) return; 
+ 
+  document.documentElement.classList.add("has-custom-cursor"); 
+ 
+  const dot = document.createElement("div"); 
+  dot.className = "cursor-dot"; 
+ 
+  const ring = document.createElement("div"); 
+  ring.className = "cursor-ring"; 
+ 
+  const trail = document.createElement("div"); 
+  trail.className = "cursor-trail"; 
+  trail.setAttribute("aria-hidden", "true"); 
+ 
+  const trailDots = []; 
+  for(let i = 0; i < 5; i++){ 
+    const trailDot = document.createElement("span"); 
+    trailDot.className = "cursor-trail__dot"; 
+    trail.appendChild(trailDot); 
+    trailDots.push(trailDot); 
+  } 
+ 
+  document.body.append(trail, dot, ring); 
+ 
+  let targetX = window.innerWidth / 2; 
+  let targetY = window.innerHeight / 2; 
+  let ringX = targetX; 
+  let ringY = targetY; 
+ 
+  const trailX = trailDots.map(function(){ return targetX; }); 
+  const trailY = trailDots.map(function(){ return targetY; }); 
+ 
+  window.addEventListener("mousemove", function(e){ 
+    targetX = e.clientX; 
+    targetY = e.clientY; 
+ 
+    /* Keep the main dot locked exactly to the pointer. */ 
+    dot.style.transform = "translate3d(" + e.clientX + "px," + e.clientY + "px,0)"; 
+  }, { passive: true }); 
+ 
+  function raf(){ 
+    ringX += (targetX - ringX) * 0.18; 
+    ringY += (targetY - ringY) * 0.18; 
+    ring.style.transform = "translate3d(" + ringX + "px," + ringY + "px,0)"; 
+ 
+    /* Slower, smoother trail: each dot eases behind the one ahead of it. */ 
+    let leadX = targetX; 
+    let leadY = targetY; 
+ 
+    trailDots.forEach(function(trailDot, index){ 
+      const ease = 0.22 - (index * 0.014); 
+ 
+      trailX[index] += (leadX - trailX[index]) * ease; 
+      trailY[index] += (leadY - trailY[index]) * ease; 
+ 
+      const scale = 0.98 - (index * 0.07); 
+      trailDot.style.transform = 
+        "translate3d(" + 
+        trailX[index].toFixed(2) + "px," + 
+        trailY[index].toFixed(2) + "px,0) scale(" + 
+        scale.toFixed(2) + ")"; 
+ 
+      leadX = trailX[index]; 
+      leadY = trailY[index]; 
+    }); 
+ 
+    requestAnimationFrame(raf); 
+  } 
+ 
+  requestAnimationFrame(raf); 
+ 
+  const interactiveSelector = "a, button, .scrapbook__item, .notes-field__item, .video-slide, .reason-card__face, [role='button']"; 
+ 
+  function setHoverState(isHovering){ 
+    ring.classList.toggle("is-active", isHovering); 
+    dot.classList.toggle("is-hovering", isHovering); 
+ 
+    /* When entering an interactive element, snap the outer ring to the 
+       pointer once so the dot sits perfectly centered inside it immediately. */ 
+    if(isHovering){ 
+      ringX = targetX; 
+      ringY = targetY; 
+      ring.style.transform = "translate3d(" + targetX + "px," + targetY + "px,0)"; 
+    } 
+  } 
+ 
+  document.addEventListener("mouseover", function(e){ 
+    if(e.target.closest(interactiveSelector)) setHoverState(true); 
+  }); 
+ 
+  document.addEventListener("mouseout", function(e){ 
+    if(e.target.closest(interactiveSelector) && !e.relatedTarget?.closest?.(interactiveSelector)){ 
+      setHoverState(false); 
+    } 
+  }); 
 }
 
 function initMagneticButtons(){
@@ -997,6 +1104,50 @@ function initGateSequence(root, opts){
   let step = 0;
   let autoTimer = null;
 
+  // Restore the original home-page cinematic flower shower.
+  // It only appears on the main entry gate, never on the final reveal.
+  const isHomeGate = root.matches("[data-gate]") && !root.matches("[data-final-gate]");
+
+  function buildGateFloaters(){
+    if(!isHomeGate) return;
+    if(root.querySelector(".gate__floaters")) return;
+
+    // Romantic flower/petal shower used on the main cinematic entry.
+    // It falls from above, fades through the screen, and is intentionally
+    // kept separate from the final-page reveal.
+    const symbols = ["✿", "❀", "❁", "✾", "✽", "✿", "❀", "♡", "✦"];
+    const types = ["", "--soft", "--gold"];
+    const wrap = document.createElement("div");
+    wrap.className = "gate__floaters";
+    wrap.setAttribute("aria-hidden", "true");
+
+    const frag = document.createDocumentFragment();
+    const reduced = prefersReducedMotion();
+    const count = window.matchMedia && window.matchMedia("(max-width: 700px)").matches ? 24 : 38;
+
+    for(let i = 0; i < count; i++){
+      const floater = document.createElement("span");
+      floater.className = "gate__floater gate__floater" + types[i % types.length];
+      floater.textContent = symbols[i % symbols.length];
+      floater.style.setProperty("--x", (1 + Math.random() * 98).toFixed(2) + "%");
+      floater.style.setProperty("--s", (0.62 + Math.random() * 1.45).toFixed(2) + "rem");
+      floater.style.setProperty("--d", (6.2 + Math.random() * 7.2).toFixed(2) + "s");
+      floater.style.setProperty("--delay", (-Math.random() * 8).toFixed(2) + "s");
+      floater.style.setProperty("--drift", (Math.random() * 180 - 90).toFixed(0) + "px");
+      floater.style.setProperty("--r", (Math.random() * 100 - 50).toFixed(0) + "deg");
+      frag.appendChild(floater);
+    }
+
+    wrap.appendChild(frag);
+    root.appendChild(wrap);
+
+    // Keep the shower visible even when the user has reduced-motion enabled:
+    // the CSS simply switches it to a gentle, non-moving atmospheric state.
+    if(reduced) wrap.classList.add("is-static");
+  }
+
+  buildGateFloaters();
+
   function showStep(i){
     lines.forEach(function(l, idx){ l.classList.toggle("is-active", idx === i); });
     if(enterBtn){
@@ -1045,6 +1196,29 @@ function initGateSequence(root, opts){
 }
 
 /* ---- Home page (index.html) ---- */
+function applyHeroImage(){
+  const hero = document.querySelector("[data-hero]");
+  if(!hero || !CONFIG.heroImage) return;
+
+  const img = hero.querySelector(".hero__media img");
+  if(!img) return;
+
+  // CONFIG is the single source of truth for the hero image.
+  img.src = CONFIG.heroImage;
+  img.alt = CONFIG.girlfriendName ? CONFIG.girlfriendName + " — birthday photo" : "Birthday photo";
+  img.loading = "eager";
+  img.decoding = "async";
+
+  const frame = img.closest("[data-media-frame]");
+  img.addEventListener("load", function(){
+    if(frame) frame.classList.remove("is-empty");
+  }, { once: true });
+  img.addEventListener("error", function(){
+    console.warn("Hero image could not be loaded:", CONFIG.heroImage);
+    if(frame) frame.classList.add("is-empty");
+  }, { once: true });
+}
+
 function initHomePage(){
   const gate = document.querySelector("[data-gate]");
   const hero = document.querySelector("[data-hero]");
@@ -1054,6 +1228,8 @@ function initHomePage(){
   // whole time. Added here, in JS, so a no-JS visitor never sees a hero
   // that's stuck invisible — see .hero.is-priming in style.css.
   if(hero) hero.classList.add("is-priming");
+
+  applyHeroImage();
 
   initGateSequence(gate, {
     onEnter: function(){
@@ -1459,9 +1635,24 @@ function initVideoFeed(){
     if(!target) return;
 
     /*
-      Stop the current video FIRST.
+      Stop the current video FIRST and reset every other video.
+      This navigation-only reset means that when the user returns
+      to a previous video, it starts again from 0:00.
     */
-    pauseAllExcept(null);
+    getSlides().forEach(function(slide){
+      if(slide === target) return;
+
+      const video = slide.querySelector("video");
+      if(!video) return;
+
+      video.pause();
+
+      try{
+        video.currentTime = 0;
+      } catch(e){
+        /* Ignore a reset failure while media is still loading. */
+      }
+    });
 
     /*
       Prevent the scroll handler from trying to
@@ -1887,6 +2078,94 @@ function initEnvelope(){
 }
 
 /* ---- Final gate + reveal (final.html) ---- */
+/* ---- Final video (final.html) ----
+   Loads CONFIG.finalVideo into the final-page video element.
+   Native browser controls stay OFF. The video is controlled only by
+   clicking/tapping the video itself: click once to pause, click again to play.
+   */
+function applyFinalVideo(){
+  const reveal = document.querySelector("[data-final-reveal]");
+  if(!reveal || !CONFIG.finalVideo) return;
+
+  const video = reveal.querySelector(".final-reveal__video video");
+  if(!video) return;
+
+  // Keep the final video completely stopped while the opening gate is showing.
+  // It must NOT start in the background and build up seconds before the reveal.
+  video.controls = false;
+  video.removeAttribute("controls");
+  video.autoplay = false;
+  video.removeAttribute("autoplay");
+  video.loop = true;
+  video.playsInline = true;
+  video.preload = "auto";
+  video.muted = true;
+  video.setAttribute("playsinline", "");
+  video.setAttribute("disablepictureinpicture", "");
+  video.setAttribute("disableremoteplayback", "");
+  video.src = CONFIG.finalVideo;
+  video.load();
+
+  video.style.cursor = "pointer";
+  video.style.userSelect = "none";
+  video.setAttribute("aria-label", "Birthday video. Click to pause or resume.");
+
+  // Always keep the video at the first frame until the final reveal actually opens.
+  if(video.readyState > 0){
+    try{ video.currentTime = 0; }catch(e){}
+  }
+
+  video.addEventListener("loadedmetadata", function(){
+    try{ video.currentTime = 0; }catch(e){}
+  }, { once: true });
+
+  // One click/tap toggles playback. No visible native controls are needed.
+  if(!video.dataset.finalToggleReady){
+    video.dataset.finalToggleReady = "true";
+    video.addEventListener("click", function(e){
+      e.preventDefault();
+      if(video.paused || video.ended){
+        const p = video.play();
+        if(p && p.catch) p.catch(function(){});
+      } else {
+        video.pause();
+      }
+    });
+  }
+}
+
+/* ---- Falling flowers on the FINAL opening gate ---- */
+function buildFinalGateFloaters(gate){
+  if(!gate || gate.querySelector(".final-gate-floaters")) return;
+
+  const wrap = document.createElement("div");
+  wrap.className = "final-gate-floaters";
+  wrap.setAttribute("aria-hidden", "true");
+
+  const symbols = ["✿", "❀", "❁", "✾", "✽", "♡", "✦"];
+  const types = ["", "--soft", "--gold"];
+  const count = window.matchMedia && window.matchMedia("(max-width: 700px)").matches ? 24 : 40;
+  const frag = document.createDocumentFragment();
+
+  for(let i = 0; i < count; i++){
+    const floater = document.createElement("span");
+    floater.className = "final-gate-floater final-gate-floater" + types[i % types.length];
+    floater.textContent = symbols[i % symbols.length];
+    floater.style.setProperty("--x", (1 + Math.random() * 98).toFixed(2) + "%");
+    floater.style.setProperty("--s", (0.62 + Math.random() * 1.45).toFixed(2) + "rem");
+    floater.style.setProperty("--d", (6.2 + Math.random() * 7.2).toFixed(2) + "s");
+    floater.style.setProperty("--delay", (-Math.random() * 8).toFixed(2) + "s");
+    floater.style.setProperty("--drift", (Math.random() * 180 - 90).toFixed(0) + "px");
+    floater.style.setProperty("--r", (Math.random() * 100 - 50).toFixed(0) + "deg");
+    frag.appendChild(floater);
+  }
+
+  wrap.appendChild(frag);
+  gate.appendChild(wrap);
+
+  if(prefersReducedMotion()) wrap.classList.add("is-static");
+}
+
 function spawnStars(container, count){
   if(!container) return;
   const frag = document.createDocumentFragment();
@@ -1929,10 +2208,49 @@ function initFinalPage(){
   const reveal = document.querySelector("[data-final-reveal]");
   if(!reveal) return;
 
+  buildFinalGateFloaters(gate);
+
+  // Load the final video, but do NOT start it while the opening gate is visible.
+  // It will be reset to 0 and started only when the final reveal opens.
+  applyFinalVideo();
+
   initGateSequence(gate, {
     onEnter: function(){
       reveal.hidden = false;
+
+      const finalVideo = reveal.querySelector(".final-reveal__video video");
+      if(finalVideo){
+        // Hard reset every time the final reveal is entered so it can never
+        // inherit playback time accumulated behind the gate.
+        try{ finalVideo.pause(); }catch(e){}
+        try{ finalVideo.currentTime = 0; }catch(e){}
+        finalVideo.muted = false;
+
+        const startFinalVideo = function(){
+          try{ finalVideo.currentTime = 0; }catch(e){}
+
+          const p = finalVideo.play();
+          if(p && p.catch){
+            p.catch(function(){
+              // Some browsers still reject audible autoplay after a delayed
+              // visual transition. Fall back to muted playback, still from 0.
+              finalVideo.muted = true;
+              try{ finalVideo.currentTime = 0; }catch(e){}
+              const fallback = finalVideo.play();
+              if(fallback && fallback.catch) fallback.catch(function(){});
+            });
+          }
+        };
+
+        if(finalVideo.readyState >= 1){
+          startFinalVideo();
+        } else {
+          finalVideo.addEventListener("loadedmetadata", startFinalVideo, { once: true });
+        }
+      }
+
       requestAnimationFrame(function(){ reveal.classList.add("is-open"); });
+
       spawnStars(reveal.querySelector("[data-stars]"), 50);
       if(!prefersReducedMotion()){
         spawnConfetti(reveal.querySelector("[data-confetti]"), 44);
@@ -1964,6 +2282,7 @@ document.addEventListener("DOMContentLoaded", function(){
   if(page === "letter"){ renderLetter(); }
   if(page === "final"){ renderFinalMessage(); }
 
+  initFooter();
   applyGirlfriendName();
   wireMediaFallbacks();
   initScrollReveal();
@@ -1981,3 +2300,145 @@ document.addEventListener("DOMContentLoaded", function(){
   if(page === "letter"){ initEnvelope(); }
   if(page === "final"){ initFinalPage(); }
 });
+
+/* ============================================================================
+   12. AQSA CINEMATIC ART DIRECTION — ambient layers, depth and polish
+   ============================================================================ */
+function initAqsaAtmosphere(){
+  if(document.querySelector('.aqsa-ambient-light')) return;
+
+  const light = document.createElement('div');
+  light.className = 'aqsa-ambient-light';
+  light.setAttribute('aria-hidden', 'true');
+
+  const vignette = document.createElement('div');
+  vignette.className = 'aqsa-ambient-vignette';
+  vignette.setAttribute('aria-hidden', 'true');
+
+  const guides = document.createElement('div');
+  guides.className = 'aqsa-guides';
+  guides.setAttribute('aria-hidden', 'true');
+
+  document.body.append(light, vignette, guides);
+
+  if(prefersReducedMotion()) return;
+
+  let raf = null;
+  let targetX = window.innerWidth * .5;
+  let targetY = window.innerHeight * .5;
+  let currentX = targetX;
+  let currentY = targetY;
+
+  window.addEventListener('pointermove', function(e){
+    targetX = (e.clientX / window.innerWidth) * 100;
+    targetY = (e.clientY / window.innerHeight) * 100;
+    if(raf === null) raf = requestAnimationFrame(tick);
+  }, { passive: true });
+
+  function tick(){
+    raf = null;
+    currentX += (targetX - currentX) * .08;
+    currentY += (targetY - currentY) * .08;
+    light.style.setProperty('--mx', currentX + '%');
+    light.style.setProperty('--my', currentY + '%');
+
+    const hero = document.querySelector('.hero');
+    if(hero){
+      const progress = Math.min(Math.max(window.scrollY / Math.max(hero.offsetHeight, 1), 0), 1);
+      hero.style.setProperty('--hero-shift-y', (-progress * 34) + 'px');
+      hero.style.setProperty('--hero-scale', (1.035 + progress * .035).toFixed(3));
+    }
+
+    document.querySelectorAll('.media-frame, .video-slide, .reason-card, .scrapbook__item').forEach(function(card){
+      const r = card.getBoundingClientRect();
+      if(r.right < -50 || r.left > window.innerWidth + 50 || r.bottom < -50 || r.top > window.innerHeight + 50) return;
+      const px = ((targetX / 100) * window.innerWidth - r.left) / Math.max(r.width, 1) * 100;
+      const py = ((targetY / 100) * window.innerHeight - r.top) / Math.max(r.height, 1) * 100;
+      const ry = Math.max(-4, Math.min(4, (50 - px) * .055));
+      const rx = Math.max(-4, Math.min(4, (py - 50) * .045));
+      card.style.setProperty('--rx', rx.toFixed(2) + 'deg');
+      card.style.setProperty('--ry', ry.toFixed(2) + 'deg');
+      card.style.setProperty('--spot-x', Math.max(0, Math.min(100, px)) + '%');
+      card.style.setProperty('--spot-y', Math.max(0, Math.min(100, py)) + '%');
+    });
+  }
+
+  window.addEventListener('scroll', function(){
+    if(raf === null) raf = requestAnimationFrame(tick);
+  }, { passive: true });
+  window.addEventListener('resize', function(){
+    if(raf === null) raf = requestAnimationFrame(tick);
+  }, { passive: true });
+
+  tick();
+}
+
+function initFooterOrb(){
+  const footer = document.querySelector('.site-footer');
+  if(!footer || footer.querySelector('.site-footer__orb')) return;
+  const orb = document.createElement('div');
+  orb.className = 'site-footer__orb';
+  orb.setAttribute('aria-hidden', 'true');
+  footer.appendChild(orb);
+}
+
+function initAqsaPageTransitions(){
+  if(prefersReducedMotion()) return;
+  document.body.classList.add('aqsa-page-enter');
+  window.setTimeout(function(){ document.body.classList.remove('aqsa-page-enter'); }, 950);
+
+  document.addEventListener('click', function(e){
+    const link = e.target.closest('a[href]');
+    if(!link) return;
+    const href = link.getAttribute('href');
+    if(!href || href.charAt(0) === '#' || link.target === '_blank') return;
+    if(/^https?:\/\//i.test(href) && new URL(href, window.location.href).origin !== window.location.origin) return;
+    document.body.classList.add('aqsa-page-leaving');
+  });
+}
+
+function initAqsaHeadingMotion(){
+  if(prefersReducedMotion()) return;
+  document.querySelectorAll('h1, h2').forEach(function(heading){
+    if(heading.dataset.aqsaHeadingReady) return;
+    if(!heading.textContent.trim() || heading.children.length) return;
+    heading.dataset.aqsaHeadingReady = 'true';
+    const text = heading.textContent.trim();
+    const words = text.split(/\s+/);
+    if(words.length < 2) return;
+    heading.innerHTML = words.map(function(word, i){
+      return '<span class="aqsa-heading-word" style="--i:' + i + '">' + escapeHTML(word) + '</span>';
+    }).join(' ');
+    heading.querySelectorAll('.aqsa-heading-word').forEach(function(word){
+      word.style.display = 'inline-block';
+    });
+    heading.classList.add('aqsa-heading');
+  });
+}
+
+/* Decorative enhancement for the existing scroll rail: animate its active dot
+   as a tiny pulse rather than changing the navigation structure. */
+function initAqsaDotPulse(){
+  const rail = document.querySelector('.scroll-dots');
+  if(!rail || prefersReducedMotion()) return;
+  rail.addEventListener('mouseenter', function(){ rail.classList.add('is-hovering'); });
+  rail.addEventListener('mouseleave', function(){ rail.classList.remove('is-hovering'); });
+}
+
+/* Run the art direction after the original site bootstrap so every existing
+   renderer and interaction remains the source of truth. */
+(function initAqsaCreativeLayer(){
+  function run(){
+    initAqsaAtmosphere();
+    initFooterOrb();
+    initAqsaPageTransitions();
+    initAqsaHeadingMotion();
+    initAqsaDotPulse();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', run, { once: true });
+  } else {
+    run();
+  }
+})();

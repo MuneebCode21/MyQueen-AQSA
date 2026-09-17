@@ -1,70 +1,455 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Happy Birthday</title>
-<meta name="description" content="A small website made for one person.">
-<meta name="robots" content="noindex, nofollow">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-</head>
-<body data-page="final">
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
 
-<div id="chrome-root"></div>
+  <meta
+    name="description"
+    content="A little birthday website made especially for Aqsa."
+  >
 
-<noscript>
+  <title>For Aqsa — One Last Thing ♡</title>
+
+  <!-- Fonts used by style.css -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..700,0..100,0..1&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="css/style.css">
+
   <style>
-    .reveal{ opacity: 1 !important; transform: none !important; }
-    .gate{ display: none !important; }
-    .final-reveal{ display: flex !important; }
-    .final-reveal__inner{ opacity: 1 !important; transform: none !important; }
+    /*
+      Final-page safety layer.
+
+      The final reveal intentionally remains in the document flow even while
+      the gate is visible. This prevents the generated footer underneath it
+      from flashing on screen during the gate's fade-out.
+    */
+    .final-page-shell {
+      position: relative;
+      min-height: 100dvh;
+      background: var(--night);
+    }
+
+    .final-reveal {
+      visibility: visible;
+    }
+
+    .final-reveal__corner img {
+      display: block;
+    }
+
+    /*
+      Four-corner keepsakes:
+      top-left, top-right, bottom-left, bottom-right.
+    */
+    .final-reveal__corner--right-top {
+      right: clamp(1rem, 3vw, 3.5rem);
+      top: clamp(5rem, 10vh, 7rem);
+      transform: rotate(7deg);
+    }
+
+    .final-reveal__corner--left-bottom {
+      left: clamp(1rem, 3vw, 3.5rem);
+      bottom: clamp(2rem, 6vh, 4rem);
+      transform: rotate(-6deg);
+    }
+
+    /*
+      Age calculator safety/layout layer.
+      The main styling is also present in style.css, but these rules make
+      the section behave correctly even if an older stylesheet is cached.
+    */
+    .birthday-age__result strong {
+      color: var(--wine-deep);
+      font-weight: 600;
+    }
+
+    @media (max-width: 800px) {
+      .final-reveal__corner {
+        width: 76px;
+      }
+
+      .final-reveal__corner--left,
+      .final-reveal__corner--right-top {
+        top: 4.2rem;
+      }
+
+      .final-reveal__corner--left {
+        left: .55rem;
+      }
+
+      .final-reveal__corner--right-top {
+        right: .55rem;
+      }
+
+      .final-reveal__corner--left-bottom {
+        left: .55rem;
+        bottom: .8rem;
+      }
+
+      .final-reveal__corner--right {
+        right: .55rem;
+        bottom: .8rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .final-reveal__corner--left,
+      .final-reveal__corner--right,
+      .final-reveal__corner--right-top,
+      .final-reveal__corner--left-bottom {
+        transform: none;
+      }
+    }
   </style>
-  <p class="noscript-note">This little site works best with JavaScript enabled — some interactive parts may not appear without it.</p>
-</noscript>
 
-<main>
 
-  <div class="gate gate--final" data-final-gate>
-    <div class="gate__inner">
-      <p class="gate__line is-active" data-gate-line>Okay.</p>
-      <p class="gate__line" data-gate-line>You've seen everything.</p>
-      <p class="gate__line" data-gate-line>Almost.</p>
-      <button class="gate__enter" type="button" data-gate-enter data-magnetic disabled>
-        <span>One last thing</span>
-        <span class="gate__enter-arrow" aria-hidden="true"></span>
-      </button>
-    </div>
-  </div>
+</head>
 
-  <section class="final-reveal" data-final-reveal hidden>
-    <div class="final-reveal__stars" data-stars aria-hidden="true"></div>
-    <div class="final-reveal__confetti" data-confetti aria-hidden="true"></div>
+<body
+  data-page="final"
+  class="final-page"
+>
 
-    <div class="final-reveal__inner">
-      <div class="media-frame final-reveal__media" data-media-frame>
-        <img class="media-frame__media" src="images/final.jpg" alt="A favourite photo of her" loading="lazy" decoding="async">
-        <div class="media-frame__empty" aria-hidden="true">
-          <svg class="media-frame__empty-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="10" width="36" height="28" rx="3"></rect><circle cx="16" cy="19" r="3"></circle><path d="M42 30l-9.5-9.5a2 2 0 0 0-2.8 0L14 36"></path></svg>
-          <span class="media-frame__empty-label">images/final.jpg</span>
+  <!-- Shared chrome: monogram, music button, menu, grain -->
+  <div id="chrome-root"></div>
+
+  <main>
+
+    <!-- ===================================================================
+         FINAL PAGE WRAPPER
+         =================================================================== -->
+    <div class="final-page-shell">
+
+      <!-- ================================================================
+           FINAL GATE
+           ================================================================ -->
+      <section
+        class="gate gate--final"
+        data-final-gate
+        aria-label="Final birthday reveal"
+      >
+
+        <div class="gate__grain" aria-hidden="true"></div>
+
+        <div class="gate__inner">
+
+          <p
+            class="gate__line is-active"
+            data-gate-line
+          >
+            Okay... you’ve seen almost everything.
+          </p>
+
+          <p
+            class="gate__line"
+            data-gate-line
+          >
+            There’s just one last thing.
+          </p>
+
+          <p
+            class="gate__line"
+            data-gate-line
+          >
+            Take a breath. This one’s just for you.
+          </p>
+
+          <button
+            class="gate__enter"
+            type="button"
+            data-gate-enter
+            disabled
+          >
+            Continue
+            <span
+              class="gate__enter-arrow"
+              aria-hidden="true"
+            ></span>
+          </button>
+
         </div>
-      </div>
+      </section>
 
-      <h1 class="final-reveal__title">Happy birthday, <span data-cfg="girlfriendName">Her Name</span> <span aria-hidden="true">❤️</span></h1>
 
-      <div class="final-reveal__message" data-final-message></div>
+      <!-- ================================================================
+           FINAL REVEAL
 
-      <a class="final-reveal__replay" href="index.html">
-        <span class="page-continue__arrow page-continue__arrow--back" aria-hidden="true"></span>
-        <span>Back to the beginning</span>
-      </a>
+           IMPORTANT:
+           No "hidden" attribute here.
+
+           Keeping this section in the document flow prevents the generated
+           footer from appearing behind the fading final gate.
+           ================================================================ -->
+      <section
+        class="final-reveal"
+        data-final-reveal
+        aria-labelledby="final-title"
+      >
+
+        <!-- Stars and confetti are populated by script.js -->
+        <div
+          class="final-reveal__stars"
+          data-stars
+          aria-hidden="true"
+        ></div>
+
+        <div
+          class="final-reveal__confetti"
+          data-confetti
+          aria-hidden="true"
+        ></div>
+
+
+        <!-- --------------------------------------------------------------
+             TOP LEFT GIF / PHOTO
+             -------------------------------------------------------------- -->
+        <div
+          class="final-reveal__corner final-reveal__corner--left"
+          aria-hidden="true"
+        >
+          <img
+            class="final-corner-gif"
+            src="images/Happy Birthday GIF by The Office.gif"
+            alt="happpyyyyyyy birthdayyyyyyyyyyyyyy"
+            loading="eager"
+          >
+        </div>
+
+
+        <!-- --------------------------------------------------------------
+             TOP RIGHT GIF / PHOTO
+             -------------------------------------------------------------- -->
+        <div
+          class="final-reveal__corner final-reveal__corner--right-top"
+          aria-hidden="true"
+        >
+          <img
+            class="final-corner-gif"
+            src="images/giphy (1).gif"
+            alt="Karomi"
+            loading="eager"
+          >
+        </div>
+
+
+        <!-- --------------------------------------------------------------
+             BOTTOM LEFT GIF / PHOTO
+             -------------------------------------------------------------- -->
+        <div
+          class="final-reveal__corner final-reveal__corner--left-bottom"
+          aria-hidden="true"
+        >
+          <img
+            class="final-corner-gif"
+            src="images/Ix4PAxmYovH5m.webp"
+            alt="my princess"
+            loading="eager"
+          >
+        </div>
+
+
+        <!-- --------------------------------------------------------------
+             BOTTOM RIGHT GIF / PHOTO
+             -------------------------------------------------------------- -->
+        <div
+          class="final-reveal__corner final-reveal__corner--right"
+          aria-hidden="true"
+        >
+          <img
+            class="final-corner-gif"
+            src="images/jwzNDFOjiUBPEUJC6G.webp"
+            alt=""
+            loading="eager"
+          >
+        </div>
+
+
+        <!-- ================================================================
+             MAIN FINAL CONTENT
+             ================================================================ -->
+        <div class="final-reveal__inner">
+
+          <!-- Candles -->
+          <div
+            class="final-reveal__candles"
+            aria-label="Birthday candles"
+          >
+            <span class="candle" aria-hidden="true"></span>
+            <span class="candle" aria-hidden="true"></span>
+            <span class="candle" aria-hidden="true"></span>
+          </div>
+
+
+          <!-- Portrait final video -->
+          <div
+            class="media-frame final-reveal__video"
+            data-media-frame
+          >
+            <video
+              class="media-frame__media final-video-clickable"
+              src="videos/lv_7577429960902806789_20260915190229.mp4"
+              playsinline
+              autoplay
+              loop
+              muted
+              preload="auto"
+              disablepictureinpicture
+              disableremoteplayback
+              aria-label="A birthday video for Aqsa"
+            ></video>
+
+            <div
+              class="media-frame__empty"
+              aria-hidden="true"
+            >
+              <svg
+                class="media-frame__empty-icon"
+                viewBox="0 0 48 48"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <rect
+                  x="6"
+                  y="9"
+                  width="36"
+                  height="30"
+                  rx="3"
+                ></rect>
+                <path
+                  d="M20 18l11 6-11 6z"
+                  fill="currentColor"
+                  stroke="none"
+                ></path>
+              </svg>
+
+              <span class="media-frame__empty-label">
+                Final video could not be loaded.
+              </span>
+            </div>
+          </div>
+
+      
+          <!-- Final title -->
+          <h1
+            class="final-reveal__title"
+            id="final-title"
+          >
+            Happy Birthday, <span data-cfg="girlfriendName">My Aqsa</span>. ♡
+          </h1>
+
+
+          <!-- Final message comes from CONFIG.finalMessage -->
+          <div
+            class="final-reveal__message"
+            data-final-message
+          >
+            <p>
+              Your the most beautiful person in the world that I know and I love you so much. I hope you have a wonderful birthday and a great year ahead. You deserve all the happiness in the world.
+            </p>
+          </div>
+
+
+          <button
+            type="button"
+            class="final-reveal__replay"
+            onclick="location.reload()"
+          >
+            Replay this little moment
+            <span aria-hidden="true">↻</span>
+          </button>
+
+        </div>
+      </section>
+
+
+      <!-- ================================================================
+           BIRTHDAY AGE CALCULATOR
+           ================================================================ -->
+      <section
+        class="birthday-age"
+        aria-labelledby="birthday-age-title"
+      >
+
+        <div class="birthday-age__inner">
+
+          <p class="birthday-age__eyebrow">
+            one little question ✦
+          </p>
+
+          <h2
+            class="birthday-age__title"
+            id="birthday-age-title"
+          >
+            So... you've grown older.
+          </h2>
+
+          <p class="birthday-age__subtitle">
+            Enter your birthday and let's see exactly how old you are now. 🎂
+          </p>
+
+
+          <div class="birthday-age__form">
+
+            <label
+              class="birthday-age__label"
+              for="birthdayDateInput"
+            >
+              Your date of birth
+            </label>
+
+            <input
+              id="birthdayDateInput"
+              class="birthday-age__input"
+              type="date"
+              autocomplete="bday"
+              aria-describedby="birthday-age-help"
+            >
+
+            <p
+              id="birthday-age-help"
+              class="visually-hidden"
+            >
+              Choose your date of birth using the calendar.
+            </p>
+
+            <button
+              type="button"
+              class="birthday-age__button"
+              id="calculateAgeBtn"
+            >
+              Tell me how old I am ✨
+            </button>
+
+          </div>
+
+
+          <div
+            id="birthdayAgeResult"
+            class="birthday-age__result"
+            aria-live="polite"
+            hidden
+          ></div>
+
+        </div>
+      </section>
+
     </div>
-  </section>
+  </main>
 
-</main>
 
-<script src="js/script.js" defer></script>
+  <!-- Shared site functionality -->
+  <script src="js/script.js" defer></script>
+
 </body>
 </html>
