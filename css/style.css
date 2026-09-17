@@ -2374,3 +2374,238 @@ p{
   .cursor-trail{display:none!important}
   .cursor-dot,.cursor-ring{transition:none!important}
 }
+
+/* ============================================================================
+   AQSA ENTRY SECURITY QUESTION — cute pre-entry modal
+   ============================================================================ */
+.entry-security{
+  position:fixed;
+  inset:0;
+  /* Sit just above the custom cursor so the native pointer can be restored
+     over the question modal without covering or hiding the form. */
+  z-index:calc(var(--z-cursor, 999) + 1);
+  display:grid;
+  place-items:center;
+  padding:1.25rem;
+  background:rgba(32,24,22,.52);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .28s var(--ease, ease),visibility .28s var(--ease, ease);
+}
+
+.entry-security[hidden]{display:none!important;}
+
+/* The site normally hides the native cursor on desktop in favour of the
+   custom cursor. During the security question, bring back the normal browser
+   cursor so the input and buttons are easy to see and use. */
+html.entry-security-open .entry-security,
+html.entry-security-open .entry-security *{
+  cursor:auto!important;
+}
+
+html.entry-security-open .entry-security__submit,
+html.entry-security-open .entry-security__close{
+  cursor:pointer!important;
+}
+
+.entry-security.is-open{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+
+.entry-security__card{
+  position:relative;
+  width:min(460px,100%);
+  padding:clamp(2rem,5vw,3rem);
+  border:1px solid rgba(107,44,58,.16);
+  border-radius:28px;
+  background:linear-gradient(145deg,rgba(255,252,247,.98),rgba(241,226,208,.98));
+  color:var(--charcoal);
+  text-align:center;
+  box-shadow:0 30px 80px rgba(45,25,30,.28),0 10px 30px rgba(45,25,30,.14);
+  transform:translateY(18px) scale(.97);
+  transition:transform .38s var(--ease-soft, ease),opacity .38s var(--ease-soft, ease);
+  overflow:hidden;
+}
+
+.entry-security.is-open .entry-security__card{
+  transform:translateY(0) scale(1);
+}
+
+.entry-security__card::before,
+.entry-security__card::after{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  border-radius:50%;
+  filter:blur(2px);
+}
+
+.entry-security__card::before{
+  width:170px;
+  height:170px;
+  top:-85px;
+  right:-55px;
+  background:rgba(216,199,161,.24);
+}
+
+.entry-security__card::after{
+  width:150px;
+  height:150px;
+  bottom:-90px;
+  left:-55px;
+  background:rgba(214,166,160,.20);
+}
+
+.entry-security__close{
+  position:absolute;
+  top:.85rem;
+  right:.95rem;
+  width:38px;
+  height:38px;
+  border:0;
+  border-radius:50%;
+  background:rgba(107,44,58,.06);
+  color:var(--wine-deep);
+  font-size:1.45rem;
+  line-height:1;
+  cursor:pointer;
+  transition:transform .2s ease,background .2s ease;
+}
+
+.entry-security__close:hover{
+  transform:rotate(8deg) scale(1.05);
+  background:rgba(107,44,58,.11);
+}
+
+.entry-security__eyebrow{
+  position:relative;
+  z-index:1;
+  margin:0 0 .55rem;
+  font-size:var(--fs-label);
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--rose-deep);
+}
+
+.entry-security__title{
+  position:relative;
+  z-index:1;
+  margin:0 0 .7rem;
+  color:var(--wine-deep);
+  font-family:var(--font-serif);
+  font-size:clamp(2rem,6vw,3rem);
+  font-style:italic;
+  line-height:1.05;
+}
+
+.entry-security__prompt{
+  position:relative;
+  z-index:1;
+  max-width:34ch;
+  margin:0 auto 1.35rem;
+  color:var(--charcoal-soft);
+  font-size:var(--fs-sm);
+  line-height:1.6;
+}
+
+.entry-security__label{
+  position:relative;
+  z-index:1;
+  display:block;
+  margin-bottom:.45rem;
+  color:var(--muted);
+  font-size:var(--fs-label);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+
+.entry-security__input{
+  position:relative;
+  z-index:1;
+  width:100%;
+  height:54px;
+  padding:0 1.05rem;
+  border:1px solid rgba(107,44,58,.18);
+  border-radius:999px;
+  background:rgba(255,255,255,.72);
+  color:var(--charcoal);
+  font:inherit;
+  text-align:center;
+  outline:none;
+  box-shadow:0 10px 28px -22px rgba(74,30,41,.45);
+}
+
+.entry-security__input:focus{
+  border-color:var(--rose-deep);
+  box-shadow:0 0 0 4px rgba(217,175,166,.24),0 10px 28px -22px rgba(74,30,41,.45);
+}
+
+.entry-security__submit{
+  position:relative;
+  z-index:1;
+  width:100%;
+  min-height:54px;
+  margin-top:.75rem;
+  padding:.8rem 1.2rem;
+  border:0;
+  border-radius:999px;
+  background:var(--wine);
+  color:var(--ivory);
+  font:600 var(--fs-sm)/1.2 var(--font-sans);
+  letter-spacing:.02em;
+  cursor:pointer;
+  box-shadow:0 16px 32px -18px rgba(74,30,41,.62);
+  transition:transform .25s var(--ease-soft),background .25s var(--ease-soft),box-shadow .25s var(--ease-soft);
+}
+
+.entry-security__submit:hover{
+  transform:translateY(-2px);
+  background:var(--wine-deep);
+  box-shadow:0 20px 36px -18px rgba(74,30,41,.7);
+}
+
+.entry-security__message{
+  position:relative;
+  z-index:1;
+  min-height:1.45em;
+  margin:.85rem 0 0;
+  color:var(--wine-deep);
+  font-family:var(--font-serif);
+  font-size:1rem;
+}
+
+.entry-security.is-error .entry-security__input{
+  border-color:rgba(107,44,58,.38);
+  animation:entry-security-shake .32s ease;
+}
+
+.entry-security.is-success .entry-security__card{
+  box-shadow:0 30px 90px rgba(74,30,41,.30),0 0 0 1px rgba(176,141,87,.10),0 12px 35px rgba(176,141,87,.14);
+}
+
+@keyframes entry-security-shake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-5px)}
+  75%{transform:translateX(5px)}
+}
+
+@media (max-width:560px){
+  .entry-security{padding:1rem;}
+  .entry-security__card{padding:2rem 1.15rem 1.5rem;border-radius:24px;}
+  .entry-security__title{font-size:clamp(1.85rem,9vw,2.5rem);}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .entry-security,
+  .entry-security__card,
+  .entry-security__submit,
+  .entry-security__close{
+    transition:none!important;
+  }
+  .entry-security.is-error .entry-security__input{animation:none!important;}
+}

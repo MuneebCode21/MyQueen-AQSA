@@ -1094,6 +1094,163 @@ function renderFinalMessage(){
    10. PAGE INTERACTIONS
    ======================================================================== */
 
+/* ---- Cute entry security question (index.html) ---- */
+function initEntrySecurityQuestion(root, onSuccess){
+  if(!root) return;
+
+  /* Re-use the same modal when Enter is pressed again after closing it.
+     This avoids creating duplicate overlays/listeners while keeping the
+     question available for another try. */
+  if(typeof root._entrySecurityOpen === "function"){
+    root._entrySecurityOpen();
+    return;
+  }
+
+  let overlay = null;
+  let input = null;
+  let submitBtn = null;
+  let message = null;
+  let title = null;
+  let prompt = null;
+  let closeBtn = null;
+  let gateEnterBtn = root.querySelector("[data-gate-enter]");
+  let lastFocused = null;
+  let successTimer = null;
+
+  function ensureSecurityModal(){
+    if(overlay) return overlay;
+
+    overlay = document.createElement("div");
+    overlay.className = "entry-security";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.setAttribute("aria-labelledby", "entry-security-title");
+    overlay.setAttribute("aria-describedby", "entry-security-prompt");
+    overlay.hidden = true;
+
+    overlay.innerHTML =
+      '<div class="entry-security__card">' +
+        '<button class="entry-security__close" type="button" aria-label="Close">×</button>' +
+        '<p class="entry-security__eyebrow">one little question ♡</p>' +
+        '<h2 class="entry-security__title" id="entry-security-title">Before you come in...</h2>' +
+        '<p class="entry-security__prompt" id="entry-security-prompt">What do you like to call me the most?</p>' +
+        '<label class="entry-security__label" for="entrySecurityAnswer">Your answer</label>' +
+        '<input class="entry-security__input" id="entrySecurityAnswer" type="text" autocomplete="off" spellcheck="false" placeholder="type it here..." maxlength="40">' +
+        '<button class="entry-security__submit" type="button">Let me in ♡</button>' +
+        '<p class="entry-security__message" aria-live="polite"></p>' +
+      '</div>';
+
+    document.body.appendChild(overlay);
+
+    input = overlay.querySelector("#entrySecurityAnswer");
+    submitBtn = overlay.querySelector(".entry-security__submit");
+    message = overlay.querySelector(".entry-security__message");
+    title = overlay.querySelector(".entry-security__title");
+    prompt = overlay.querySelector(".entry-security__prompt");
+    closeBtn = overlay.querySelector(".entry-security__close");
+
+    function closeModal(){
+      if(!overlay || overlay.hidden) return;
+      if(successTimer) clearTimeout(successTimer);
+      overlay.classList.remove("is-open", "is-success", "is-error");
+      if(gateEnterBtn && !root.dataset.securityPassed){
+        gateEnterBtn.disabled = false;
+      }
+      document.documentElement.classList.remove("entry-security-open");
+      window.setTimeout(function(){
+        if(overlay){
+          overlay.hidden = true;
+          document.body.classList.remove("has-overlay-open");
+        }
+      }, 260);
+      if(lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
+    }
+
+    function showSuccess(){
+      overlay.classList.remove("is-error");
+      overlay.classList.add("is-success");
+      title.textContent = "YAYYYYYYYYYYYYYYYYY :) ♡";
+      prompt.textContent = "Okay... I know it's you. Come on in. ✨";
+      input.hidden = true;
+      submitBtn.hidden = true;
+      overlay.querySelector(".entry-security__label").hidden = true;
+      message.textContent = "Correct answer.";
+
+      successTimer = window.setTimeout(function(){
+        /* Mark the gate as passed BEFORE closing so the Enter button stays
+           disabled until the original gate begins its exit animation. */
+        root.dataset.securityPassed = "true";
+        closeModal();
+        window.setTimeout(function(){
+          if(typeof onSuccess === "function") onSuccess();
+        }, 300);
+      }, 1000);
+    }
+
+    function checkAnswer(){
+      const answer = (input.value || "").trim().toLowerCase();
+      if(answer === "batman"){
+        showSuccess();
+        return;
+      }
+
+      overlay.classList.remove("is-success");
+      overlay.classList.add("is-error");
+      message.textContent = "Hmm... that's not it ♡ Try again.";
+      input.focus();
+      input.select();
+    }
+
+    submitBtn.addEventListener("click", checkAnswer);
+    input.addEventListener("keydown", function(e){
+      if(e.key === "Enter"){
+        e.preventDefault();
+        checkAnswer();
+      }
+    });
+    closeBtn.addEventListener("click", closeModal);
+    overlay.addEventListener("click", function(e){
+      if(e.target === overlay) closeModal();
+    });
+    document.addEventListener("keydown", function(e){
+      if(!overlay || overlay.hidden) return;
+      if(e.key === "Escape"){
+        e.preventDefault();
+        closeModal();
+        return;
+      }
+      trapTabKey(e, overlay);
+    });
+
+    overlay._open = function(){
+      lastFocused = document.activeElement;
+      overlay.hidden = false;
+      overlay.classList.remove("is-success", "is-error");
+      title.textContent = "Before you come in...";
+      prompt.textContent = "What do you like to call me the most?";
+      input.hidden = false;
+      submitBtn.hidden = false;
+      overlay.querySelector(".entry-security__label").hidden = false;
+      message.textContent = "";
+      input.value = "";
+      document.body.classList.add("has-overlay-open");
+      document.documentElement.classList.add("entry-security-open");
+      requestAnimationFrame(function(){
+        overlay.classList.add("is-open");
+        /* Make keyboard entry reliable even when the custom cursor is active. */
+        input.focus({ preventScroll: true });
+        input.select();
+      });
+    };
+
+    return overlay;
+  }
+
+  const modal = ensureSecurityModal();
+  root._entrySecurityOpen = modal._open;
+  modal._open();
+}
+
 /* ---- Gate sequence (shared by index.html and final.html) ---- */
 function initGateSequence(root, opts){
   if(!root) return;
@@ -1186,6 +1343,20 @@ function initGateSequence(root, opts){
 
   if(enterBtn){
     enterBtn.addEventListener("click", function(){
+      /* The main home gate gets one playful question before it opens. */
+      if(isHomeGate && !root.dataset.securityPassed){
+        enterBtn.disabled = true;
+        initEntrySecurityQuestion(root, function(){
+          root.dataset.securityPassed = "true";
+          root.classList.add("is-leaving");
+          window.setTimeout(function(){
+            root.hidden = true;
+            if(typeof opts.onEnter === "function") opts.onEnter();
+          }, 750);
+        });
+        return;
+      }
+
       root.classList.add("is-leaving");
       window.setTimeout(function(){
         root.hidden = true;
