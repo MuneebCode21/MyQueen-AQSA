@@ -2687,20 +2687,88 @@ function initAqsaDotPulse(){
   rail.addEventListener('mouseleave', function(){ rail.classList.remove('is-hovering'); });
 }
 
-/* Run the art direction after the original site bootstrap so every existing
-   renderer and interaction remains the source of truth. */
+function initBackToBeginning(){
+
+  if(document.querySelector(".back-to-beginning")){
+    return;
+  }
+
+  const button = document.createElement("button");
+
+  button.type = "button";
+  button.className = "back-to-beginning";
+
+  button.setAttribute(
+    "aria-label",
+    "Back to the beginning"
+  );
+
+  button.innerHTML =
+    '<span class="back-to-beginning__arrow" aria-hidden="true">↑</span>' +
+    '<span class="back-to-beginning__label">beginning</span>' +
+    '<span class="back-to-beginning__spark" aria-hidden="true">✦</span>';
+
+  document.body.appendChild(button);
+
+  function updateVisibility(){
+
+    button.classList.toggle(
+      "is-visible",
+      window.scrollY > 420
+    );
+
+  }
+
+  button.addEventListener(
+    "click",
+    function(){
+
+      window.scrollTo({
+        top:0,
+        behavior:
+          prefersReducedMotion()
+            ? "auto"
+            : "smooth"
+      });
+
+    }
+  );
+
+  window.addEventListener(
+    "scroll",
+    updateVisibility,
+    { passive:true }
+  );
+
+  updateVisibility();
+}
+
 (function initAqsaCreativeLayer(){
+
   function run(){
+
     initAqsaAtmosphere();
     initFooterOrb();
     initAqsaPageTransitions();
     initAqsaHeadingMotion();
     initAqsaDotPulse();
+
+    initBackToBeginning();
+
   }
 
   if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', run, { once: true });
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      run,
+      { once:true }
+    );
+
   } else {
+
     run();
+
   }
+
 })();

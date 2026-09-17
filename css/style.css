@@ -2609,3 +2609,299 @@ html.entry-security-open .entry-security__close{
   }
   .entry-security.is-error .entry-security__input{animation:none!important;}
 }
+
+/* ==========================================================================
+   AQSA HEADER — FINAL STABLE THEME SYSTEM
+   --------------------------------------------------------------------------
+   LIGHT SURFACE:
+     dark charcoal/wine pill + warm white text
+
+   DARK SURFACE:
+     warm white pill + dark brown text
+
+   NO mix-blend-mode.
+   ========================================================================== */
+
+
+/* ========================================================================
+   LIGHT SURFACE — DEFAULT
+   ======================================================================== */
+
+#chrome-root .chrome-mono,
+#chrome-root .chrome-music,
+#chrome-root .chrome-nav-trigger,
+.back-to-beginning{
+
+  background:#3B302B!important;
+  color:#FFF7EE!important;
+
+  border:1px solid rgba(59,48,43,.58)!important;
+
+  box-shadow:
+    0 12px 30px -16px rgba(43,36,30,.42),
+    inset 0 1px 0 rgba(255,255,255,.10)!important;
+
+  transition:
+    background-color .5s var(--ease),
+    color .5s var(--ease),
+    border-color .5s var(--ease),
+    box-shadow .5s var(--ease),
+    transform .35s var(--ease)!important;
+}
+
+
+/* Music bars */
+#chrome-root .chrome-music__bars i{
+  background:#FFF7EE!important;
+  transition:background-color .5s var(--ease)!important;
+}
+
+
+/* Hamburger */
+#chrome-root .chrome-nav-trigger > span:not(.chrome-nav-trigger__label){
+  background:#FFF7EE!important;
+
+  transition:
+    background-color .5s var(--ease),
+    transform .45s var(--ease)!important;
+}
+
+
+/* ========================================================================
+   DARK SURFACE
+   ======================================================================== */
+
+#chrome-root .chrome-mono.chrome-is-dark,
+#chrome-root .chrome-music.chrome-is-dark,
+#chrome-root .chrome-nav-trigger.chrome-is-dark,
+.back-to-beginning.chrome-is-dark{
+
+  background:#FFF7EE!important;
+  color:#3B302B!important;
+
+  border-color:rgba(255,247,238,.88)!important;
+
+  box-shadow:
+    0 14px 36px -18px rgba(0,0,0,.62),
+    inset 0 1px 0 rgba(255,255,255,.96)!important;
+}
+
+
+/* Dark surface — music icon */
+#chrome-root .chrome-music.chrome-is-dark .chrome-music__bars i{
+  background:#3B302B!important;
+}
+
+
+/* Dark surface — hamburger */
+#chrome-root .chrome-nav-trigger.chrome-is-dark > span:not(.chrome-nav-trigger__label){
+  background:#3B302B!important;
+}
+
+
+/* ========================================================================
+   HOVER — LIGHT SURFACE
+   ======================================================================== */
+
+#chrome-root .chrome-mono:not(.chrome-is-dark):hover,
+#chrome-root .chrome-music:not(.chrome-is-dark):hover,
+#chrome-root .chrome-nav-trigger:not(.chrome-is-dark):hover,
+.back-to-beginning:not(.chrome-is-dark):hover{
+
+  background:#5A3A43!important;
+  color:#FFF9F1!important;
+
+  border-color:#5A3A43!important;
+}
+
+
+/* ========================================================================
+   HOVER — DARK SURFACE
+   ======================================================================== */
+
+#chrome-root .chrome-mono.chrome-is-dark:hover,
+#chrome-root .chrome-music.chrome-is-dark:hover,
+#chrome-root .chrome-nav-trigger.chrome-is-dark:hover,
+.back-to-beginning.chrome-is-dark:hover{
+
+  background:#FFFFFF!important;
+  color:#3B302B!important;
+
+  border-color:#FFFFFF!important;
+}
+
+
+/* ========================================================================
+   MENU OPEN
+   ======================================================================== */
+
+#chrome-root .chrome-nav-trigger[aria-expanded="true"]{
+
+  background:#FFF7EE!important;
+  color:#3B302B!important;
+
+  border-color:rgba(255,255,255,.92)!important;
+
+  box-shadow:
+    0 16px 38px -18px rgba(0,0,0,.60),
+    inset 0 1px 0 rgba(255,255,255,1)!important;
+}
+
+
+#chrome-root .chrome-nav-trigger[aria-expanded="true"] > span:not(.chrome-nav-trigger__label){
+  background:#3B302B!important;
+}
+
+
+/* ========================================================================
+   BACK TO BEGINNING
+   ======================================================================== */
+
+.back-to-beginning{
+
+  position:fixed;
+
+  right:max(1.1rem,env(safe-area-inset-right));
+  bottom:max(1.1rem,env(safe-area-inset-bottom));
+
+  z-index:calc(var(--z-chrome) - 1);
+
+  min-height:46px;
+
+  padding:.45rem .82rem .45rem .58rem;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:.55rem;
+
+  border-radius:999px;
+
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+
+  transform:translateY(12px) scale(.96);
+}
+
+
+.back-to-beginning.is-visible{
+
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+
+  transform:translateY(0) scale(1);
+}
+
+
+/* Beginning arrow */
+.back-to-beginning__arrow{
+
+  width:28px;
+  height:28px;
+
+  border-radius:50%;
+
+  display:grid;
+  place-items:center;
+
+  background:rgba(255,247,238,.12);
+  color:currentColor;
+
+  font-size:1rem;
+  line-height:1;
+
+  transition:
+    background-color .5s var(--ease),
+    transform .35s var(--ease);
+}
+
+
+.back-to-beginning.chrome-is-dark
+.back-to-beginning__arrow{
+
+  background:rgba(59,48,43,.08);
+}
+
+
+/* Beginning text */
+.back-to-beginning__label{
+
+  font-size:.68rem;
+  font-weight:600;
+
+  letter-spacing:.11em;
+  text-transform:uppercase;
+
+  line-height:1;
+}
+
+
+/* Beginning sparkle */
+.back-to-beginning__spark{
+
+  color:var(--gold-soft);
+  font-size:.7rem;
+
+  transform:translateY(-4px);
+}
+
+
+/* Hover */
+.back-to-beginning:hover{
+
+  transform:translateY(-3px) scale(1.025);
+}
+
+.back-to-beginning:hover .back-to-beginning__arrow{
+
+  transform:translateY(-2px);
+}
+
+
+/* ========================================================================
+   MOBILE
+   ======================================================================== */
+
+@media (max-width:700px){
+
+  .back-to-beginning{
+
+    right:max(.75rem,env(safe-area-inset-right));
+    bottom:max(.75rem,env(safe-area-inset-bottom));
+
+    min-height:42px;
+
+    padding:.4rem .68rem .4rem .5rem;
+  }
+
+  .back-to-beginning__arrow{
+
+    width:25px;
+    height:25px;
+
+    font-size:.9rem;
+  }
+
+  .back-to-beginning__label{
+    font-size:.58rem;
+  }
+
+  .back-to-beginning__spark{
+    display:none;
+  }
+}
+
+
+@media (prefers-reduced-motion:reduce){
+
+  #chrome-root .chrome-mono,
+  #chrome-root .chrome-music,
+  #chrome-root .chrome-nav-trigger,
+  .back-to-beginning{
+
+    transition:none!important;
+  }
+}
