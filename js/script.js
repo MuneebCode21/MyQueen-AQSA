@@ -1282,6 +1282,94 @@ function initCountdown(){
 }
 
 
+/* ---- Birthday age calculator (final.html) ---- */
+function initAgeCalculator(){
+  const input = document.getElementById("birthdayDateInput");
+  const button = document.getElementById("calculateAgeBtn");
+  const result = document.getElementById("birthdayAgeResult");
+
+  if(!input || !button || !result) return;
+
+  button.addEventListener("click", function(){
+    const value = input.value;
+
+    if(!value){
+      result.hidden = false;
+      result.innerHTML = "<strong>Please choose your date of birth first. ♡</strong>";
+      return;
+    }
+
+    const parts = value.split("-").map(Number);
+
+    if(parts.length !== 3 || parts.some(Number.isNaN)){
+      result.hidden = false;
+      result.innerHTML = "<strong>Please choose a valid date. ♡</strong>";
+      return;
+    }
+
+    const birthYear = parts[0];
+    const birthMonth = parts[1] - 1;
+    const birthDay = parts[2];
+
+    const today = new Date();
+
+    const birthDate = new Date(
+      birthYear,
+      birthMonth,
+      birthDay
+    );
+
+    /* Reject impossible dates that JavaScript would otherwise normalize. */
+    if(
+      birthDate.getFullYear() !== birthYear ||
+      birthDate.getMonth() !== birthMonth ||
+      birthDate.getDate() !== birthDay
+    ){
+      result.hidden = false;
+      result.innerHTML = "<strong>Please choose a valid date. ♡</strong>";
+      return;
+    }
+
+    if(birthDate > today){
+      result.hidden = false;
+      result.innerHTML = "<strong>That birthday hasn't happened yet. ✨</strong>";
+      return;
+    }
+
+    let years = today.getFullYear() - birthYear;
+    let months = today.getMonth() - birthMonth;
+    let days = today.getDate() - birthDay;
+
+    if(days < 0){
+      months--;
+
+      const previousMonth = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        0
+      );
+
+      days += previousMonth.getDate();
+    }
+
+    if(months < 0){
+      years--;
+      months += 12;
+    }
+
+    result.hidden = false;
+    result.innerHTML =
+      "<strong>You are " +
+      years +
+      " years, " +
+      months +
+      " months, and " +
+      days +
+      " days old. 🎂♡</strong>";
+  });
+}
+
+
 /* ---- MAIN VIDEO FEED (videos.html) ----
    Handles:
    - Main/active video detection
@@ -2298,7 +2386,10 @@ document.addEventListener("DOMContentLoaded", function(){
   if(page === "videos"){ initVideoFeed(); }
   if(page === "story"){ initStoryScroll(); }
   if(page === "letter"){ initEnvelope(); }
-  if(page === "final"){ initFinalPage(); }
+  if(page === "final"){
+    initFinalPage();
+    initAgeCalculator();
+  }
 });
 
 /* ============================================================================
