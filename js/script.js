@@ -92,11 +92,11 @@ const CONFIG = {
 
   letter: {
     paragraphs: [
-      "PLACEHOLDER — start however feels natural. You don't have to be a writer, just be honest.",
-      "PLACEHOLDER — say the thing you actually want her to know today.",
-      "PLACEHOLDER — end it however feels true to you."
+      "Your eyes... what a cruel kind of beautiful. The kind that autumn envies.",
+      "They remind me of golden leaves caught in the wind, of old books with stories aching to be told... of the way coffee tastes in silence.",
+      "I see in them a fire that never dims, and every time you look my way, I swear I fall all over again."
     ],
-    signature: "— Me"
+    signature: "— Your Neeb"
   },
 
   finalMessage: [
@@ -308,7 +308,7 @@ const MUSIC_PREF_KEY =
   this key remembers that fact across page reloads.
 */
 const SECURITY_PASSED_KEY =
-  "bday_security_passed";
+   "bday_security_passed_v3";
 
 
 function initMusicToggle(btn){
@@ -3262,539 +3262,349 @@ function renderFinalMessage(){
    ======================================================================== */
 
 
-/* ------------------------------------------------------------------------
-   ENTRY SECURITY QUESTION — FIRST VISIT ONLY
-   ------------------------------------------------------------------------ */
-
-function initEntrySecurityQuestion(
-  root,
-  onSuccess
-){
+function initEntrySecurityQuestion(root, onSuccess){
 
   if(!root){
     return;
   }
 
+  let overlay = null;
+  let input = null;
+  let submitBtn = null;
+  let message = null;
+  let lastFocused = null;
 
-  if(
-    typeof root._entrySecurityOpen ===
-    "function"
-  ){
+  function continueAfterSuccess(){
 
-    root._entrySecurityOpen();
+    safeSet(
+      SECURITY_PASSED_KEY,
+      "1"
+    );
 
-    return;
+    root.dataset.securityPassed = "true";
+
+    root.classList.add("is-leaving");
+
+    window.setTimeout(function(){
+
+      root.hidden = true;
+
+      if(typeof onSuccess === "function"){
+        onSuccess();
+      }
+
+    }, 750);
   }
 
+  function closeModal(){
 
-  let overlay =
-    null;
-
-  let input =
-    null;
-
-  let submitBtn =
-    null;
-
-  let message =
-    null;
-
-  let title =
-    null;
-
-  let prompt =
-    null;
-
-  let closeBtn =
-    null;
-
-  let gateEnterBtn =
-    root.querySelector(
-      "[data-gate-enter]"
-    );
-
-  let lastFocused =
-    null;
-
-  let successTimer =
-    null;
-
-
-  function ensureSecurityModal(){
-
-    if(overlay){
-      return overlay;
+    if(!overlay){
+      return;
     }
 
-
-    overlay =
-      document.createElement(
-        "div"
-      );
-
-
-    overlay.className =
-      "entry-security";
-
-
-    overlay.setAttribute(
-      "role",
-      "dialog"
+    overlay.classList.remove(
+      "is-open",
+      "is-error"
     );
 
-
-    overlay.setAttribute(
-      "aria-modal",
-      "true"
+    document.documentElement.classList.remove(
+      "entry-security-open"
     );
 
-
-    overlay.setAttribute(
-      "aria-labelledby",
-      "entry-security-title"
+    document.body.classList.remove(
+      "has-overlay-open"
     );
 
+    window.setTimeout(function(){
 
-    overlay.setAttribute(
-      "aria-describedby",
-      "entry-security-prompt"
-    );
+      if(overlay){
+        overlay.hidden = true;
+      }
 
+    }, 260);
 
-    overlay.hidden =
-      true;
+  }
 
+  function checkAnswer(){
 
-    overlay.innerHTML =
+    const answer =
+      (input.value || "")
+        .trim()
+        .toLowerCase();
 
-      '<div class="entry-security__card">' +
+    if(answer === "batman"){
 
-        '<button class="entry-security__close" type="button" aria-label="Close">×</button>' +
+      overlay.classList.remove("is-error");
 
-        '<p class="entry-security__eyebrow">one little question ♡</p>' +
+      overlay.classList.add("is-success");
 
-        '<h2 class="entry-security__title" id="entry-security-title">Before you come in...</h2>' +
-
-        '<p class="entry-security__prompt" id="entry-security-prompt">What do you like to call me the most?</p>' +
-
-        '<label class="entry-security__label" for="entrySecurityAnswer">Your answer</label>' +
-
-        '<input class="entry-security__input" id="entrySecurityAnswer" type="text" autocomplete="off" spellcheck="false" placeholder="type it here..." maxlength="40">' +
-
-        '<button class="entry-security__submit" type="button">Let me in ♡</button>' +
-
-        '<p class="entry-security__message" aria-live="polite"></p>' +
-
-      '</div>';
-
-
-    document.body.appendChild(
-      overlay
-    );
-
-
-    input =
-      overlay.querySelector(
-        "#entrySecurityAnswer"
-      );
-
-
-    submitBtn =
-      overlay.querySelector(
-        ".entry-security__submit"
-      );
-
-
-    message =
-      overlay.querySelector(
-        ".entry-security__message"
-      );
-
-
-    title =
       overlay.querySelector(
         ".entry-security__title"
-      );
-
-
-    prompt =
-      overlay.querySelector(
-        ".entry-security__prompt"
-      );
-
-
-    closeBtn =
-      overlay.querySelector(
-        ".entry-security__close"
-      );
-
-
-    function closeModal(){
-
-      if(
-        !overlay ||
-        overlay.hidden
-      ){
-        return;
-      }
-
-
-      if(successTimer){
-        clearTimeout(
-          successTimer
-        );
-      }
-
-
-      overlay.classList.remove(
-        "is-open",
-        "is-success",
-        "is-error"
-      );
-
-
-      if(
-        gateEnterBtn &&
-        !root.dataset.securityPassed
-      ){
-
-        gateEnterBtn.disabled =
-          false;
-      }
-
-
-      document.documentElement.classList.remove(
-        "entry-security-open"
-      );
-
-
-      window.setTimeout(
-        function(){
-
-          if(overlay){
-
-            overlay.hidden =
-              true;
-
-            document.body.classList.remove(
-              "has-overlay-open"
-            );
-          }
-
-        },
-        260
-      );
-
-
-      if(
-        lastFocused &&
-        typeof lastFocused.focus ===
-        "function"
-      ){
-
-        lastFocused.focus();
-      }
-    }
-
-
-    function showSuccess(){
-
-      overlay.classList.remove(
-        "is-error"
-      );
-
-
-      overlay.classList.add(
-        "is-success"
-      );
-
-
-      title.textContent =
+      ).textContent =
         "YAYYYYYYYYYYYYYYYYY :) ♡";
 
-
-      prompt.textContent =
+      overlay.querySelector(
+        ".entry-security__prompt"
+      ).textContent =
         "Okay... I know it's you. Come on in. ✨";
 
+      input.hidden = true;
+      submitBtn.hidden = true;
 
-      input.hidden =
-        true;
-
-
-      submitBtn.hidden =
-        true;
-
-
-      overlay
-        .querySelector(
-          ".entry-security__label"
-        )
-        .hidden =
-        true;
-
+      overlay.querySelector(
+        ".entry-security__label"
+      ).hidden = true;
 
       message.textContent =
-        "Correct answer.";
+        "Correct answer. ♡";
 
-
-      /*
-        IMPORTANT:
-        Save the successful answer permanently for this browser.
-        The next time index.html opens, the question is skipped.
-      */
       safeSet(
         SECURITY_PASSED_KEY,
         "1"
       );
 
-
       root.dataset.securityPassed =
         "true";
 
+      window.setTimeout(
+        function(){
 
-      successTimer =
-        window.setTimeout(
+          closeModal();
+
+          window.setTimeout(
+            function(){
+              continueAfterSuccess();
+            },
+            300
+          );
+
+        },
+        900
+      );
+
+      return;
+    }
+
+    overlay.classList.remove(
+      "is-success"
+    );
+
+    overlay.classList.add(
+      "is-error"
+    );
+
+    message.textContent =
+      "Hmm... that's not it ♡ Try again.";
+
+    input.focus();
+    input.select();
+  }
+
+  function openModal(){
+
+    if(!overlay){
+
+      overlay =
+        document.createElement("div");
+
+      overlay.className =
+        "entry-security";
+
+      overlay.setAttribute(
+        "role",
+        "dialog"
+      );
+
+      overlay.setAttribute(
+        "aria-modal",
+        "true"
+      );
+
+      overlay.setAttribute(
+        "aria-labelledby",
+        "entry-security-title"
+      );
+
+      overlay.setAttribute(
+        "aria-describedby",
+        "entry-security-prompt"
+      );
+
+      overlay.hidden = true;
+
+      overlay.innerHTML =
+
+        '<div class="entry-security__card">' +
+
+          '<button class="entry-security__close" type="button" aria-label="Close">×</button>' +
+
+          '<p class="entry-security__eyebrow">one little question ♡</p>' +
+
+          '<h2 class="entry-security__title" id="entry-security-title">' +
+            'Before you come in...' +
+          '</h2>' +
+
+          '<p class="entry-security__prompt" id="entry-security-prompt">' +
+            'What do you like to call me the most?' +
+          '</p>' +
+
+          '<label class="entry-security__label" for="entrySecurityAnswer">' +
+            'Your answer' +
+          '</label>' +
+
+          '<input ' +
+            'class="entry-security__input" ' +
+            'id="entrySecurityAnswer" ' +
+            'type="text" ' +
+            'autocomplete="off" ' +
+            'spellcheck="false" ' +
+            'placeholder="type it here..." ' +
+            'maxlength="40">' +
+
+          '<button class="entry-security__submit" type="button">' +
+            'Let me in ♡' +
+          '</button>' +
+
+          '<p class="entry-security__message" aria-live="polite"></p>' +
+
+        '</div>';
+
+      document.body.appendChild(
+        overlay
+      );
+
+      input =
+        overlay.querySelector(
+          ".entry-security__input"
+        );
+
+      submitBtn =
+        overlay.querySelector(
+          ".entry-security__submit"
+        );
+
+      message =
+        overlay.querySelector(
+          ".entry-security__message"
+        );
+
+      overlay
+        .querySelector(
+          ".entry-security__close"
+        )
+        .addEventListener(
+          "click",
           function(){
 
             closeModal();
 
-
-            window.setTimeout(
-              function(){
-
-                if(
-                  typeof onSuccess ===
-                  "function"
-                ){
-
-                  onSuccess();
-
-                }
-
-              },
-              300
-            );
-
-          },
-          1000
-        );
-    }
-
-
-    function checkAnswer(){
-
-      const answer =
-        (
-          input.value ||
-          ""
-        )
-        .trim()
-        .toLowerCase();
-
-
-      if(answer === "batman"){
-
-        showSuccess();
-
-        return;
-      }
-
-
-      overlay.classList.remove(
-        "is-success"
-      );
-
-
-      overlay.classList.add(
-        "is-error"
-      );
-
-
-      message.textContent =
-        "Hmm... that's not it ♡ Try again.";
-
-
-      input.focus();
-
-
-      input.select();
-    }
-
-
-    submitBtn.addEventListener(
-      "click",
-      checkAnswer
-    );
-
-
-    input.addEventListener(
-      "keydown",
-      function(e){
-
-        if(
-          e.key === "Enter"
-        ){
-
-          e.preventDefault();
-
-          checkAnswer();
-
-        }
-
-      }
-    );
-
-
-    closeBtn.addEventListener(
-      "click",
-      closeModal
-    );
-
-
-    overlay.addEventListener(
-      "click",
-      function(e){
-
-        if(
-          e.target ===
-          overlay
-        ){
-
-          closeModal();
-
-        }
-
-      }
-    );
-
-
-    document.addEventListener(
-      "keydown",
-      function(e){
-
-        if(
-          !overlay ||
-          overlay.hidden
-        ){
-          return;
-        }
-
-
-        if(
-          e.key === "Escape"
-        ){
-
-          e.preventDefault();
-
-          closeModal();
-
-          return;
-        }
-
-
-        trapTabKey(
-          e,
-          overlay
-        );
-
-      }
-    );
-
-
-    overlay._open =
-      function(){
-
-        lastFocused =
-          document.activeElement;
-
-
-        overlay.hidden =
-          false;
-
-
-        overlay.classList.remove(
-          "is-success",
-          "is-error"
-        );
-
-
-        title.textContent =
-          "Before you come in...";
-
-
-        prompt.textContent =
-          "What do you like to call me the most?";
-
-
-        input.hidden =
-          false;
-
-
-        submitBtn.hidden =
-          false;
-
-
-        overlay
-          .querySelector(
-            ".entry-security__label"
-          )
-          .hidden =
-          false;
-
-
-        message.textContent =
-          "";
-
-
-        input.value =
-          "";
-
-
-        document.body.classList.add(
-          "has-overlay-open"
-        );
-
-
-        document.documentElement.classList.add(
-          "entry-security-open"
-        );
-
-
-        requestAnimationFrame(
-          function(){
-
-            overlay.classList.add(
-              "is-open"
-            );
-
-
-            input.focus({
-              preventScroll:true
-            });
-
-
-            input.select();
+            const enterBtn =
+              root.querySelector(
+                "[data-gate-enter]"
+              );
+
+            if(enterBtn){
+              enterBtn.disabled = false;
+            }
 
           }
         );
-      };
 
+      submitBtn.addEventListener(
+        "click",
+        checkAnswer
+      );
 
-    return overlay;
+      input.addEventListener(
+        "keydown",
+        function(e){
+
+          if(e.key === "Enter"){
+
+            e.preventDefault();
+
+            checkAnswer();
+
+          }
+
+        }
+      );
+
+      overlay.addEventListener(
+        "click",
+        function(e){
+
+          if(e.target === overlay){
+            closeModal();
+
+            const enterBtn =
+              root.querySelector(
+                "[data-gate-enter]"
+              );
+
+            if(enterBtn){
+              enterBtn.disabled = false;
+            }
+          }
+
+        }
+      );
+    }
+
+    lastFocused =
+      document.activeElement;
+
+    overlay.hidden = false;
+
+    overlay.classList.remove(
+      "is-success",
+      "is-error"
+    );
+
+    overlay.querySelector(
+      ".entry-security__title"
+    ).textContent =
+      "Before you come in...";
+
+    overlay.querySelector(
+      ".entry-security__prompt"
+    ).textContent =
+      "What do you like to call me the most?";
+
+    input.hidden = false;
+    submitBtn.hidden = false;
+
+    overlay.querySelector(
+      ".entry-security__label"
+    ).hidden = false;
+
+    message.textContent = "";
+
+    input.value = "";
+
+    document.body.classList.add(
+      "has-overlay-open"
+    );
+
+    document.documentElement.classList.add(
+      "entry-security-open"
+    );
+
+    requestAnimationFrame(function(){
+
+      overlay.classList.add(
+        "is-open"
+      );
+
+      input.focus({
+        preventScroll:true
+      });
+
+    });
   }
 
-
-  const modal =
-    ensureSecurityModal();
-
-
-  root._entrySecurityOpen =
-    modal._open;
-
-
-  modal._open();
+  openModal();
 }
-
 
 /* ------------------------------------------------------------------------
    GATE SEQUENCE
